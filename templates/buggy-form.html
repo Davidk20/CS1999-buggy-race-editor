@@ -4,13 +4,30 @@
 
 {% block content %}
 
-  <h1>Make buggy</h1>
-  <form action="/new" method="post">
-    <label for="qty_wheels">Number of wheels:</label>
-    <input type="text" name="qty_wheels" />
-    <input type="submit" class="button">
-  </form>
-  <p>
-    <a href="/" class="button">home</a>
-   </p>
+    <h1>Make Buggy</h1>
+    <form action="/new" method="post">
+        <label for="qty_wheels">Number of wheels:</label>
+        <input type="text" name="qty_wheels" />
+        <br>
+        <label for="power_type">Primary motive power:</label>
+            <select name="power_type" class="select_form">
+                <optgroup>
+                    <option value="petrol">Petrol</option>
+                    <option value="fusion">Fusion Reactor</option>
+                    <option value="steam">Steam Engine</option>
+                    <option value="bio">Bio-fuelled internal combustion engine</option>
+                    <option value="electric">Lithium-Ion battery</option>
+                    <option value="rocket">Rocket Fuel</option>
+                    <option value="hamster">Hamster</option>
+                    <option value="thermo">Thermonuclear Reactor</option>
+                    <option value="solar">Bank of solar panels</option>
+                    <option value="wind">Sailing rig</option>
+                </optgroup>
+            </select>
+        <br>
+        <input type="submit" class="button">
+    </form>
+    <p>
+        <a href="/" class="button">Home</a>
+    </p>
 {% endblock %}
