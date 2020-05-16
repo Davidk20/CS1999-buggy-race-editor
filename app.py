@@ -8,6 +8,21 @@ DEFAULT_BUGGY_ID = "1"
 BUGGY_RACE_SERVER_URL = "http://rhul.buggyrace.net"
 
 
+
+def form_validation(wheels,power_1,units_1,power_2,units_2,color_1,pattern,color_2):
+  for require in [wheels,power_1,units_1,power_2,units_2,color_1,pattern,color_2]:
+    if require=='' or ' ':
+      return 'error'
+  wheels=int(wheels)
+  if wheels<4 or (wheels%2)!=0 or power_1==power_2 or color_1==color_2 or units_1.isalpha() or units_2.isalpha():
+    return 'error'
+  elif power_2=="none" and int(units_2)>0:
+    return 'error'
+  elif power_2!='none' and int(units_2)<1:
+    return 'error'
+  else:
+    return 'success'
+
 #------------------------------------------------------------
 # the index page
 #------------------------------------------------------------
@@ -26,27 +41,33 @@ def create_buggy():
     return render_template("buggy-form.html")
   elif request.method == 'POST':
     msg=""
-    try:
-      qty_wheels = request.form['qty_wheels']
-      power_type = request.form['power_type']
-      power_units = request.form['power_units']
-      aux_power_type = request.form['aux_power_type']
-      aux_power_units = request.form['aux_power_units']
-      flag_color_primary = request.form['flag_color_primary']
-      flag_pattern = request.form['flag_pattern']
-      flag_color_secondary = request.form['flag_color_secondary']
-      msg = f"qty_wheels={qty_wheels}" 
-      with sql.connect(DATABASE_FILE) as con:
-        cur = con.cursor()
-        cur.execute("UPDATE buggies set qty_wheels=?, power_type=?,power_units=?,aux_power_type=?,aux_power_units=?,flag_color_primary=?,flag_pattern=?,flag_color_secondary=? WHERE id=?", (qty_wheels,power_type,power_units,aux_power_type,aux_power_units,flag_color_primary,flag_pattern,flag_color_secondary, DEFAULT_BUGGY_ID))
-        con.commit()
-        msg = "Record successfully saved"
-    except:
-      con.rollback()
-      msg = "error in update operation"
-    finally:
-      con.close()
-      return render_template("updated.html", msg = msg)
+    qty_wheels = request.form['qty_wheels']
+    power_type = request.form['power_type']
+    power_units = request.form['power_units']
+    aux_power_type = request.form['aux_power_type']
+    aux_power_units = request.form['aux_power_units']
+    flag_color_primary = request.form['flag_color_primary']
+    flag_pattern = request.form['flag_pattern']
+    flag_color_secondary = request.form['flag_color_secondary']
+    if form_validation(qty_wheels, power_type, power_units, aux_power_type, aux_power_units, flag_color_primary, flag_pattern, flag_color_secondary) == 'error':
+      print('error')
+      msg="error in update operation"
+      fix_entry=True
+      return render_template("updated.html", msg=msg,fix_entry=fix_entry)
+    else:
+      try:
+        msg = f"qty_wheels={qty_wheels}"
+        with sql.connect(DATABASE_FILE) as con:
+          cur = con.cursor()
+          cur.execute("UPDATE buggies set qty_wheels=?, power_type=?,power_units=?,aux_power_type=?,aux_power_units=?,flag_color_primary=?,flag_pattern=?,flag_color_secondary=? WHERE id=?", (qty_wheels,power_type,power_units,aux_power_type,aux_power_units,flag_color_primary,flag_pattern,flag_color_secondary, DEFAULT_BUGGY_ID))
+          con.commit()
+          msg = "Record successfully saved"
+      except:
+        con.rollback()
+        msg = "error in update operation"
+      finally:
+        con.close()
+        return render_template("updated.html", msg = msg, fix_entry=False)
 
 #------------------------------------------------------------
 # a page for displaying the buggy
