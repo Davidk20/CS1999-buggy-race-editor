@@ -10,15 +10,10 @@ BUGGY_RACE_SERVER_URL = "http://rhul.buggyrace.net"
 
 
 def form_validation(wheels,power_1,units_1,power_2,units_2,color_1,pattern,color_2):
-  for require in [wheels,power_1,units_1,power_2,units_2,color_1,pattern,color_2]:
-    if require=='' or ' ':
-      return 'error'
   wheels=int(wheels)
-  if wheels<4 or (wheels%2)!=0 or power_1==power_2 or color_1==color_2 or units_1.isalpha() or units_2.isalpha():
+  if wheels<4 or (wheels%2)!=0 or power_1==power_2 or color_1==color_2 or units_1.isalpha() or not str(units_2).isdigit():
     return 'error'
   elif power_2=="none" and int(units_2)>0:
-    return 'error'
-  elif power_2!='none' and int(units_2)<1:
     return 'error'
   else:
     return 'success'
@@ -49,11 +44,19 @@ def create_buggy():
     flag_color_primary = request.form['flag_color_primary']
     flag_pattern = request.form['flag_pattern']
     flag_color_secondary = request.form['flag_color_secondary']
+    if qty_wheels=='' or ' ':
+      qty_wheels=4
+    elif power_units=='' or ' ':
+      power_units='1'
+    if aux_power_units=='':
+      aux_power_units=0
+
+
     if form_validation(qty_wheels, power_type, power_units, aux_power_type, aux_power_units, flag_color_primary, flag_pattern, flag_color_secondary) == 'error':
-      print('error')
       msg="error in update operation"
       fix_entry=True
       return render_template("updated.html", msg=msg,fix_entry=fix_entry)
+    #TODO find some way of leaving user data in forms if there is an incomplete buggy submit
     else:
       try:
         msg = f"qty_wheels={qty_wheels}"
