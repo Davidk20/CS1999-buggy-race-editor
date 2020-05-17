@@ -7,65 +7,53 @@
     <h1>Make Buggy</h1>
     <form action="/new" method="post">
         <label for="qty_wheels">Number of wheels:</label>
-        <input type="text" name="qty_wheels" placeholder="4"/>
+        <input type="text" name="qty_wheels" value={{value_fills[0]}}>
         <br>
         <label for="power_type">Primary motive power:</label>
         <select name="power_type" class="select_form">
-                <optgroup>
-                    <option value="petrol">Petrol</option>
-                    <option value="fusion">Fusion Reactor</option>
-                    <option value="steam">Steam Engine</option>
-                    <option value="bio">Bio-fuelled internal combustion engine</option>
-                    <option value="electric">Lithium-Ion battery</option>
-                    <option value="rocket">Rocket Fuel</option>
-                    <option value="hamster">Hamster</option>
-                    <option value="thermo">Thermonuclear Reactor</option>
-                    <option value="solar">Bank of solar panels</option>
-                    <option value="wind">Sailing rig</option>
-                </optgroup>
+            {% for i in [['petrol','Petrol'],['fusion','Fusion Reactor'],['steam','Steam Engine'],['bio','Bio-fuelled internal combustion engine'],['electric','Lithium-Ion battery'],['rocket','Rocket Fuel'],['hamster','Hamster'],['thermo','Thermonuclear Reactor'],['solar','Bank of Solar Panels'],['wind','Sailing Rig']] %}
+                {% if value_fills[1] == i[0] %}
+                    <option selected="selected" value={{i[0]}}>{{i[1]}}</option>
+                {% else %}
+                    <option value={{i[0]}}>{{i[1]}}</option>
+                {% endif %}
+            {% endfor %}
             </select>
         <br>
         <label for="power_units">Primary motive power units:</label>
-        <input type="text" name="power_units" placeholder="1"/>
+        <input type="text" name="power_units" value={{value_fills[2]}}>
         <br>
         <label for="aux_power_type">Auxilliary motive power:</label>
         <select name="aux_power_type" class="select_form">
-            <optgroup>
-                <option value="none">none</option>
-                <option value="petrol">Petrol</option>
-                <option value="fusion">Fusion Reactor</option>
-                <option value="steam">Steam Engine</option>
-                <option value="bio">Bio-fuelled internal combustion engine</option>
-                <option value="electric">Lithium-Ion battery</option>
-                <option value="rocket">Rocket Fuel</option>
-                <option value="hamster">Hamster</option>
-                <option value="thermo">Thermonuclear Reactor</option>
-                <option value="solar">Bank of solar panels</option>
-                <option value="wind">Sailing rig</option>
-            </optgroup>
+            {% for i in [['petrol','Petrol'],['fusion','Fusion Reactor'],['steam','Steam Engine'],['bio','Bio-fuelled internal combustion engine'],['electric','Lithium-Ion battery'],['rocket','Rocket Fuel'],['hamster','Hamster'],['thermo','Thermonuclear Reactor'],['solar','Bank of Solar Panels'],['wind','Sailing Rig']] %}
+                {% if value_fills[3] == i[0] %}
+                    <option selected="selected" value={{i[0]}}>{{i[1]}}</option>
+                {% else %}
+                    <option value={{i[0]}}>{{i[1]}}</option>
+                {% endif %}
+            {% endfor %}
         </select>
         <br>
         <label for="aux_power_units">Auxillery motive power units:</label>
-        <input type="text" name="aux_power_units" placeholder="0"/>
+        <input type="text" name="aux_power_units" value={{value_fills[4]}}>
         <br>
         <label for="flag_color_primary">Flag's primary colour:</label>
-        <input type="color" name="flag_color_primary"/>
+        <input type="color" name="flag_color_primary" value={{value_fills[5]}}>
         <br>
         <label for="flag_pattern">Flag's pattern:</label>
         <select name="flag_pattern" class="select_form">
-                <optgroup>
-                    <option value="plain">plain</option>
-                    <option value="vstripe">Vertical Stripes</option>
-                    <option value="hstripe">Horizontal Stripes</option>
-                    <option value="dstripe">Diagonal Stripes</option>
-                    <option value="checker">Checkered</option>
-                    <option value="spot">Spots</option>
-                </optgroup>
-            </select>
+            {% for i in [['plain','Plain'],['vstripe','Vertical Stripes'],['hstripe','Horizontal Stripes'],['dstripe','Diagonal Stripes'],['checker','Checkered'],['spot','Spots'],] %}
+                {% if value_fills[6] == i[0] %}
+                    <option selected="selected" value={{i[0]}}>{{i[1]}}</option>
+                {% else %}
+                    <option value={{i[0]}}>{{i[1]}}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
         <br>
 
         <label for="power_units">Flag's secondary colour:</label>
-        <input type="color" name="flag_color_secondary"/>
+        <input type="color" name="flag_color_secondary" value={{value_fills[7]}}>
         <br>
 
         <input type="submit" class="button">

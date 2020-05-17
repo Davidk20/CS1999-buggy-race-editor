@@ -32,8 +32,16 @@ def home():
 #------------------------------------------------------------
 @app.route('/new', methods = ['POST', 'GET'])
 def create_buggy():
+  con = sql.connect(DATABASE_FILE)
+  con.row_factory = sql.Row
+  cur = con.cursor()
+  cur.execute("SELECT qty_wheels,power_type, power_units, aux_power_type, aux_power_units, flag_color_primary, flag_pattern, flag_color_secondary FROM buggies ORDER BY id DESC LIMIT 1")
+  record = cur.fetchone()
+  value_fills = []
+  for data in enumerate(record):
+    value_fills.append(data[1])
   if request.method == 'GET':
-    return render_template("buggy-form.html")
+    return render_template("buggy-form.html",value_fills=value_fills)
   elif request.method == 'POST':
     msg=""
     qty_wheels = request.form['qty_wheels']
@@ -44,14 +52,12 @@ def create_buggy():
     flag_color_primary = request.form['flag_color_primary']
     flag_pattern = request.form['flag_pattern']
     flag_color_secondary = request.form['flag_color_secondary']
-    if qty_wheels=='' or ' ':
-      qty_wheels=4
-    elif power_units=='' or ' ':
+    if not qty_wheels:
+      qty_wheels = '4'
+    elif not power_units:
       power_units='1'
-    if aux_power_units=='':
+    if not aux_power_units:
       aux_power_units=0
-
-
     if form_validation(qty_wheels, power_type, power_units, aux_power_type, aux_power_units, flag_color_primary, flag_pattern, flag_color_secondary) == 'error':
       msg="error in update operation"
       fix_entry=True
@@ -85,7 +91,7 @@ def show_buggies():
   return render_template("buggy.html", buggy = record)
 
 #------------------------------------------------------------
-# a page for displaying the buggy
+# a page for displaying the buggy form
 #------------------------------------------------------------
 @app.route('/new')
 def edit_buggy():
