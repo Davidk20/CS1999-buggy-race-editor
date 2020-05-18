@@ -20,10 +20,8 @@ body {
   margin: 0 0 0 3em;
 }
 
-.title h1 {
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
+h1 {
+  text-align: center;
 }
 
 p {
@@ -41,22 +39,62 @@ a.button, input.button {
   box-shadow: 5px 5px 5px #999999;
 }
 
-a.button:hover {
+a.button:hover, input.button:hover {
   background-color: black;
   color: white;
+  cursor: pointer;
 }
 
 input {
   padding: 0.5em;
-  font-size: 100%;
+  font-size: 1.25em;
+  margin-bottom: 1em;
+}
+
+select {
+  font-size: 1.1em;
+  width: 400px;
+  margin-bottom: 1em;
+}
+
+input[type=color] {
+  width: 375px;
+}
+
+input[type=text] {
+  width: 375px;
 }
 
 input.button {
   background-color: #99ff99;
+  margin-left: 42.5%;
+  display: inline-block;
+  width: 100px;
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+div.buggy_form {
+  display: block;
+  text-align: center;
+}
+
+.new_buggy_form {
+  display: inline-block;
+  margin-right: auto;
+  margin-left: auto;
+  text-align: left;
 }
 
 label {
-  padding-right: 3em;
+  display: inline-block;
+  width: 300px;
+  text-align: center;
+}
+
+.nav_buttons {
+  display: block;
+  text-align: center;
 }
 
 table {
