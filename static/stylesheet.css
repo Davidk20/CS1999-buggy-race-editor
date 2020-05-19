@@ -28,7 +28,7 @@ p {
   margin: 1em 0;
 }
 
-a.button, input.button {
+.standard_button_styling, .record_navigation input[type=submit], a.button, input.button {
   border: 1px solid black;
   padding: 0.5em;
   margin: 0.5em;
@@ -90,6 +90,7 @@ label {
   display: inline-block;
   width: 300px;
   text-align: center;
+  font-size: 1.2em;
 }
 
 .nav_buttons {
@@ -110,7 +111,28 @@ table td, table th {
 }
 
 .spacer {
-  margin: 3em 0;
+  display: block;
+  margin: 3em auto 3em auto;
+  text-align: center;
+}
+
+.spacer p {
+  width: 50%;
+  display: block;
+  margin: 3em auto 3em auto;
+  text-align: center;
+}
+
+.buggy_list {
+  text-align: center;
+  font-size: 0.9em;
+}
+
+.record_navigation {
+  border-right-style: hidden;
+  border-top-style: hidden;
+  border-bottom-style: hidden;
+  font-size: 0.8em;
 }
 
 /*# sourceMappingURL=stylesheet.css.map */

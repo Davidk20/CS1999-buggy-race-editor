@@ -1,98 +1,143 @@
-html{
-  margin:0;
-  padding: 0;
-  background: #a7a5a5;
+html {
+    margin: 0;
+    padding: 0;
+    background: #a7a5a5;
 }
-body {
-  font-family: "Source Sans Pro","Helvetica Neue",Arial,Helvetica,sans-serif;
-  margin-left:auto;
-  margin-right: auto;
-  padding: 0;
-  font-size: 1.2em;
-  color: #000000;
-}
-.main-content {
-  min-height:100vh;
-  padding: 1em;
-  background: white;
-  margin: 0 0 0 3em;
-}
-h1{
-  text-align: center;
 
+body {
+    font-family: "Source Sans Pro", "Helvetica Neue", Arial, Helvetica, sans-serif;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
+    font-size: 1.2em;
+    color: #000000;
 }
+
+.main-content {
+    min-height: 100vh;
+    padding: 1em;
+    background: white;
+    margin: 0 0 0 3em;
+}
+
+h1 {
+    text-align: center;
+}
+
 p {
-  margin: 1em 0;
+    margin: 1em 0;
 }
+
+.standard_button_styling {
+    border: 1px solid black;
+    padding: 0.5em;
+    margin: 0.5em;
+    border-radius: 0.25em;
+    text-decoration: none;
+    background-color: white;
+    color: black;
+    box-shadow: 5px 5px 5px #999999;
+}
+
 a.button, input.button {
-  border:1px solid black;
-  padding:0.5em;
-  margin:0.5em;
-  border-radius: 0.25em;
-  text-decoration: none;
-  background-color: white;
-  color: black;
-  box-shadow: 5px 5px 5px #999999;
+    @extend .standard_button_styling
 }
+
 a.button:hover, input.button:hover {
-  background-color: black;
-  color: white;
-  cursor: pointer;
+    background-color: black;
+    color: white;
+    cursor: pointer;
 }
 
 input {
-  padding: 0.5em;
-  font-size:1.25em;
-  margin-bottom:1em;
+    padding: 0.5em;
+    font-size: 1.25em;
+    margin-bottom: 1em;
 }
-select{
-  font-size: 1.1em;
-  width:400px;
-  margin-bottom:1em;
+
+select {
+    font-size: 1.1em;
+    width: 400px;
+    margin-bottom: 1em;
 }
-input[type=color]{
-  width:375px;
+
+input[type=color] {
+    width: 375px;
 }
-input[type=text]{
-    width:375px;
+
+input[type=text] {
+    width: 375px;
 }
+
 input.button {
-  background-color: #99ff99;
-  margin-left: 42.5%;
-  display: inline-block;
-  width:100px;
-  text-align: center;
-  margin-bottom:1em;
+    background-color: #99ff99;
+    margin-left: 42.5%;
+    display: inline-block;
+    width: 100px;
+    text-align: center;
+    margin-bottom: 1em;
 }
-div.buggy_form{
-  display: block;
-  text-align: center;
+
+div.buggy_form {
+    display: block;
+    text-align: center;
 }
-.new_buggy_form{
-  display: inline-block;
-  margin-right: auto;
-  margin-left: auto;
-  text-align: left;
+
+.new_buggy_form {
+    display: inline-block;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: left;
 }
-label{
-  display: inline-block;
-  width:300px;
-  text-align: center;
+
+label {
+    display: inline-block;
+    width: 300px;
+    text-align: center;
+    font-size: 1.2em;
 }
-.nav_buttons{
-  display: block;
-  text-align: center;
+
+.nav_buttons {
+    display: block;
+    text-align: center;
 }
+
 table {
-  border:1px solid black;
-  border-collapse: collapse;
-  margin: 0 0 2em 0;
+    border: 1px solid black;
+    border-collapse: collapse;
+    margin: 0 0 2em 0;
 }
+
 table td, table th {
   padding: 0.25em;
   border: 1px solid #999;
   padding: 0.5rem;
 }
+
 .spacer {
-  margin: 3em 0;
+    display: block;
+    margin: 3em auto 3em auto;
+    text-align: center;
+}
+
+.spacer p {
+    width: 50%;
+    display: block;
+    margin: 3em auto 3em auto;
+    text-align: center;
+}
+
+.buggy_list {
+    text-align: center;
+    font-size: 0.9em;
+}
+
+.record_navigation {
+    border-right-style: hidden;
+    border-top-style: hidden;
+    border-bottom-style: hidden;
+    font-size: 0.8em;
+    input[type=submit] {
+        @extend .standard_button_styling
+  }
 }
