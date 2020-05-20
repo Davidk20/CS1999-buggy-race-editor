@@ -26,8 +26,10 @@
                         <td>{{ entry }}</td>
                     {% endif %}
                 {% endfor %}
-            <td class="record_navigation"><input type="submit" name="modify" value="Modify"></td>
-            <td class="record_navigation"><input type="submit" name="delete" value="Delete"></td>
+                <form action="/buggy" method="post">
+                    <td class="record_navigation"><input type="submit" value="Modify" name='{{ record[0] }}'></td>
+                    <td class="record_navigation"><input type="submit" value="Delete" name={{record[0]}}></td>
+                </form>
             </tr>
         {% endfor %}
     </table>

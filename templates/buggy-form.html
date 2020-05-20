@@ -9,7 +9,7 @@
         <form action="/new" method="post" class="new_buggy_form">
         <!-- TODO create some form of tooltip for hints about formatting in entry boxes-->
             <label for="qty_wheels">Number of wheels:</label>
-            <input required title="test" type="text" name="qty_wheels" value={{value_fills[0]}}>
+            <input required title="test" type="text" name="qty_wheels" placeholder="4" value={{value_fills[0]}}>
             <br>
             <label for="power_type">Primary motive power:</label>
             <select name="power_type" class="select_form">
@@ -20,14 +20,14 @@
                         <option value={{i[0]}}>{{i[1]}}</option>
                     {% endif %}
                 {% endfor %}
-                </select>
+            </select>
             <br>
             <label for="power_units">Primary motive power units:</label>
             <input required type="text" name="power_units" value={{value_fills[2]}}>
             <br>
             <label for="aux_power_type">Auxilliary motive power:</label>
             <select name="aux_power_type" class="select_form">
-                {% for i in [['petrol','Petrol'],['fusion','Fusion Reactor'],['steam','Steam Engine'],['bio','Bio-fuelled internal combustion engine'],['electric','Lithium-Ion battery'],['rocket','Rocket Fuel'],['hamster','Hamster'],['thermo','Thermonuclear Reactor'],['solar','Bank of Solar Panels'],['wind','Sailing Rig']] %}
+                {% for i in [['none','None'],['petrol','Petrol'],['fusion','Fusion Reactor'],['steam','Steam Engine'],['bio','Bio-fuelled internal combustion engine'],['electric','Lithium-Ion battery'],['rocket','Rocket Fuel'],['hamster','Hamster'],['thermo','Thermonuclear Reactor'],['solar','Bank of Solar Panels'],['wind','Sailing Rig']] %}
                     {% if value_fills[3] == i[0] %}
                         <option selected="selected" value={{i[0]}}>{{i[1]}}</option>
                     {% else %}

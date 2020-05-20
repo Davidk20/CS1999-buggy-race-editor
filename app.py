@@ -1,11 +1,10 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, g
 import sqlite3 as sql
 app = Flask(__name__)
-
 DATABASE_FILE = "database.db"
 DEFAULT_BUGGY_ID = "1"
-
 BUGGY_RACE_SERVER_URL = "http://rhul.buggyrace.net"
+value_fills=[]
 #TODO 2-RULES - Game rules not setup yet and so cant add validation
 #TODO 3-AUTOFILL - rules not set so cant autofill valid data
 
@@ -19,6 +18,22 @@ def form_validation(wheels,power_1,units_1,power_2,units_2,color_1,pattern,color
     else:
         return 'success'
 
+def fill_form(buggy):
+    con = sql.connect(DATABASE_FILE)
+    con.row_factory = sql.Row
+    cur = con.cursor()
+    if buggy == None:
+        cur.execute("SELECT qty_wheels,power_type, power_units, aux_power_type, aux_power_units, flag_color_primary, flag_pattern, flag_color_secondary FROM buggies ORDER BY id DESC LIMIT 1")
+    else:
+        cur.execute("SELECT qty_wheels,power_type, power_units, aux_power_type, aux_power_units, flag_color_primary, flag_pattern, flag_color_secondary FROM buggies WHERE id=?",(buggy,))
+    record = cur.fetchone()
+    value_fills = []
+    try:
+        for data in enumerate(record):
+            value_fills.append(data[1])
+    except:
+        value_fills=[]
+    return value_fills
 #------------------------------------------------------------
 # the index page
 #------------------------------------------------------------
@@ -33,15 +48,8 @@ def home():
 #------------------------------------------------------------
 @app.route('/new', methods = ['POST', 'GET'])
 def create_buggy():
-    con = sql.connect(DATABASE_FILE)
-    con.row_factory = sql.Row
-    cur = con.cursor()
-    cur.execute("SELECT qty_wheels,power_type, power_units, aux_power_type, aux_power_units, flag_color_primary, flag_pattern, flag_color_secondary FROM buggies ORDER BY id DESC LIMIT 1")
-    record = cur.fetchone()
-    value_fills = []
-    for data in enumerate(record):
-        value_fills.append(data[1])
     if request.method == 'GET':
+        value_fills = fill_form(None)
         return render_template("buggy-form.html",value_fills=value_fills)
     elif request.method == 'POST':
         msg=""
@@ -100,8 +108,21 @@ def show_buggies():
         cur.execute("SELECT * FROM buggies")
         record = cur.fetchall();
         return render_template("buggy.html", buggy = record)
-    #elif request.method == 'POST':
     #TODO finish setting up passthrough from manage to edit buggy
+    elif request.method == 'POST':
+        command = request.form
+        command_list=[]
+        for key, value in command.items():
+            temp = [key, value]
+            command_list.append(temp)
+        print(command_list[0][1])
+        if command_list[0][1] == 'Modify':
+            buggy = fill_form(command_list[0][0])
+            return render_template("buggy-form.html", value_fills=buggy)
+            #return render_template("updated.html", msg=buggy)
+        elif command_list[0][1] == 'Delete':
+            msg = delete_buggy(command_list[0][0])
+            return render_template("updated.html", msg=msg, deleted=True)
 
 
 #------------------------------------------------------------
@@ -144,20 +165,20 @@ def summary():
 
 
 @app.route('/delete', methods = ['POST'])
-def delete_buggy():
+def delete_buggy(buggy_id):
     try:
         msg = "deleting buggy"
         with sql.connect(DATABASE_FILE) as con:
             cur = con.cursor()
-            cur.execute("DELETE FROM buggies")
+            cur.execute("DELETE FROM buggies WHERE id=?", (buggy_id,))
             con.commit()
-            msg = "Buggy deleted"
+            msg = "Buggy Deleted"
     except:
         con.rollback()
         msg = "error in delete operation"
     finally:
         con.close()
-        return render_template("updated.html", msg = msg)
+        return msg
 
 
 if __name__ == '__main__':

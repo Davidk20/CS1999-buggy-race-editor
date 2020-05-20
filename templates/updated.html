@@ -10,8 +10,10 @@
   <p>
     {% if fix_entry==True %}
         <a href="/new" class="button">Return to Form</a>
+    {% elif deleted ==True %}
+        <a href="/buggy" class="button">Return to Buggies</a>
     {% endif %}
-    <a href="/" class="button">home</a>
+    <a href="/" class="button">Home</a>
   </p>
 
 {% endblock %}
