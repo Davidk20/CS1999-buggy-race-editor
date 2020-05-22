@@ -65,9 +65,13 @@ input[type=text] {
   width: 375px;
 }
 
+input[type=number] {
+  width: 375px;
+}
+
 input.button {
   background-color: #99ff99;
-  margin-left: 42.5%;
+  margin-left: 46.5%;
   display: inline-block;
   width: 100px;
   text-align: center;
@@ -77,6 +81,7 @@ input.button {
 div.buggy_form {
   display: block;
   text-align: center;
+  font-size: 0.9em;
 }
 
 .new_buggy_form {
@@ -125,7 +130,7 @@ table td, table th {
 
 .buggy_list {
   text-align: center;
-  font-size: 0.9em;
+  font-size: 0.7em;
 }
 
 .record_navigation {

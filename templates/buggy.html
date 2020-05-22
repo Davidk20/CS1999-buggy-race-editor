@@ -12,14 +12,25 @@
             <td>Power Units</td>
             <td>Auxillary Motive Power</td>
             <td>Auxillary Power Units</td>
+            <td>Hamster Booster</td>
             <td colspan="2">Flag Primary Colour</td>
             <td colspan="2">Flag Secondary Colour</td>
             <td>Flag Pattern</td>
+            <td>Type of Tyre</td>
+            <td>Number of Tyres</td>
+            <td>Armour</td>
+            <td>Offencive Capability</td>
+            <td>Number of Attacks</td>
+            <td>Fireproof?</td>
+            <td>Insulated?</td>
+            <td>Antibiotic</td>
+            <td>Banging Sound System</td>
+            <td>Race Computer Algorithm</td>
         </tr>
         {% for record in buggy %}
             <tr>
                 {% for entry in record %}
-                    {% if entry == record[6] or entry==record[7] %}
+                    {% if entry == record[7] or entry==record[8] %}
                         <td style="background-color: {{ entry }}"></td>
                         <td>{{ entry }}</td>
                     {% else %}

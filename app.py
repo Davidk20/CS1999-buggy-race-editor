@@ -1,31 +1,25 @@
 from flask import Flask, render_template, request, jsonify, g
 import sqlite3 as sql
+from form_validation import buggy_validation
+import random
 app = Flask(__name__)
 DATABASE_FILE = "database.db"
 DEFAULT_BUGGY_ID = "1"
 BUGGY_RACE_SERVER_URL = "http://rhul.buggyrace.net"
 value_fills=[]
+new_buggy=[]
 #TODO 2-RULES - Game rules not setup yet and so cant add validation
 #TODO 3-AUTOFILL - rules not set so cant autofill valid data
 
-
-def form_validation(wheels,power_1,units_1,power_2,units_2,color_1,pattern,color_2):
-    wheels=int(wheels)
-    if wheels<4 or (wheels%2)!=0 or power_1==power_2 or color_1==color_2 or units_1.isalpha() or not str(units_2).isdigit():
-        return 'error'
-    elif power_2=="none" and int(units_2)>0:
-        return 'error'
-    else:
-        return 'success'
 
 def fill_form(buggy):
     con = sql.connect(DATABASE_FILE)
     con.row_factory = sql.Row
     cur = con.cursor()
     if buggy == None:
-        cur.execute("SELECT qty_wheels,power_type, power_units, aux_power_type, aux_power_units, flag_color_primary, flag_pattern, flag_color_secondary FROM buggies ORDER BY id DESC LIMIT 1")
+        cur.execute("SELECT qty_wheels,power_type,power_units,aux_power_type,aux_power_units,hamster_booster,flag_color_primary,flag_pattern,flag_color_secondary,tyres,qty_tyres,armour,attack,qty_attacks,fireproof,insulated,antibiotic,banging,algo FROM buggies ORDER BY id DESC LIMIT 1")
     else:
-        cur.execute("SELECT qty_wheels,power_type, power_units, aux_power_type, aux_power_units, flag_color_primary, flag_pattern, flag_color_secondary FROM buggies WHERE id=?",(buggy,))
+        cur.execute("SELECT qty_wheels,power_type,power_units,aux_power_type,aux_power_units,hamster_booster,flag_color_primary,flag_pattern,flag_color_secondary,tyres,qty_tyres,armour,attack,qty_attacks,fireproof,insulated,antibiotic,banging,algo FROM buggies WHERE id=?",(buggy,))
     record = cur.fetchone()
     value_fills = []
     try:
@@ -58,21 +52,28 @@ def create_buggy():
         power_units = request.form['power_units']
         aux_power_type = request.form['aux_power_type']
         aux_power_units = request.form['aux_power_units']
+        hamster_booster = request.form['hamster_booster']
         flag_color_primary = request.form['flag_color_primary']
         flag_pattern = request.form['flag_pattern']
         flag_color_secondary = request.form['flag_color_secondary']
-        if not qty_wheels:
-            qty_wheels = '4'
-        elif not power_units:
-            power_units='1'
-        if not aux_power_units:
-            aux_power_units=0
-        if form_validation(qty_wheels, power_type, power_units, aux_power_type, aux_power_units, flag_color_primary, flag_pattern, flag_color_secondary) == 'error':
+        tyres = request.form['tyres']
+        qty_tyres = request.form['qty_tyres']
+        armour = request.form['armour']
+        attack = request.form['attack']
+        qty_attacks = request.form['qty_attacks']
+        fireproof = request.form['fireproof']
+        insulated = request.form['insulated']
+        antibiotic = request.form['antibiotic']
+        banging = request.form['banging']
+        algo = request.form['algo']
+        new_buggy=[qty_wheels,power_type,power_units,aux_power_type,aux_power_units,hamster_booster,flag_color_primary,flag_pattern,flag_color_secondary,tyres,qty_tyres,armour,attack,qty_attacks,fireproof,insulated,antibiotic,banging,algo]
+        result = buggy_validation(new_buggy)
+        if result.passback() == 'error':
             msg="error in update operation"
             fix_entry=True
             return render_template("updated.html", msg=msg,fix_entry=fix_entry)
             #TODO find some way of leaving user data in forms if there is an incomplete buggy submit
-        else:
+        elif result.passback() == 'success':
             try:
                 msg = f"qty_wheels={qty_wheels}"
                 with sql.connect(DATABASE_FILE) as con:
@@ -80,10 +81,8 @@ def create_buggy():
                     cur.execute("SELECT id FROM buggies ORDER BY id DESC LIMIT 1")
                     latest_id = cur.fetchone()
                     cur.execute(
-                        "INSERT INTO buggies (qty_wheels, power_type, power_units, aux_power_type, aux_power_units, flag_color_primary, flag_pattern, flag_color_secondary) VALUES(?,?,?,?,?,?,?,?)",
-                        (qty_wheels, power_type, power_units, aux_power_type, aux_power_units, flag_color_primary,
-                         flag_pattern, flag_color_secondary))
-                    # cur.execute("UPDATE buggies set qty_wheels=?, power_type=?,power_units=?,aux_power_type=?,aux_power_units=?,flag_color_primary=?,flag_pattern=?,flag_color_secondary=? WHERE id=?", (qty_wheels,power_type,power_units,aux_power_type,aux_power_units,flag_color_primary,flag_pattern,flag_color_secondary, DEFAULT_BUGGY_ID))
+                        "INSERT INTO buggies (qty_wheels,power_type,power_units,aux_power_type,aux_power_units,hamster_booster,flag_color_primary,flag_pattern,flag_color_secondary,tyres,qty_tyres,armour,attack,qty_attacks,fireproof,insulated,antibiotic,banging,algo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                        (qty_wheels,power_type,power_units,aux_power_type,aux_power_units,hamster_booster,flag_color_primary,flag_pattern,flag_color_secondary,tyres,qty_tyres,armour,attack,qty_attacks,fireproof,insulated,antibiotic,banging,algo))
                     con.commit()
                     msg = "Record successfully saved"
             except:
@@ -91,7 +90,7 @@ def create_buggy():
               msg = "error in update operation"
             finally:
               con.close()
-        return render_template("updated.html", msg = msg, fix_entry=False)
+            return render_template("updated.html", msg = msg, fix_entry=False)
 
 
 #------------------------------------------------------------
@@ -108,7 +107,6 @@ def show_buggies():
         cur.execute("SELECT * FROM buggies")
         record = cur.fetchall();
         return render_template("buggy.html", buggy = record)
-    #TODO finish setting up passthrough from manage to edit buggy
     elif request.method == 'POST':
         command = request.form
         command_list=[]
@@ -119,11 +117,10 @@ def show_buggies():
         if command_list[0][1] == 'Modify':
             buggy = fill_form(command_list[0][0])
             return render_template("buggy-form.html", value_fills=buggy)
-            #return render_template("updated.html", msg=buggy)
         elif command_list[0][1] == 'Delete':
             msg = delete_buggy(command_list[0][0])
             return render_template("updated.html", msg=msg, deleted=True)
-
+#TODO create custom div for user to view flags using template patterns and pass colours through from list into the styles
 
 #------------------------------------------------------------
 # a page for displaying the buggy form
@@ -148,7 +145,7 @@ def summary():
     con = sql.connect(DATABASE_FILE)
     con.row_factory = sql.Row
     cur = con.cursor()
-    cur.execute("SELECT * FROM buggies WHERE id=? LIMIT 1", (DEFAULT_BUGGY_ID))
+    cur.execute("SELECT * FROM buggies WHERE id=10 LIMIT 1")
     return jsonify(
         {k: v for k, v in dict(zip(
           [column[0] for column in cur.description], cur.fetchone())).items()
