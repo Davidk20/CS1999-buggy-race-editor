@@ -17,7 +17,6 @@ body {
   min-height: 100vh;
   padding: 1em;
   background: white;
-  margin: 0 0 0 3em;
 }
 
 h1 {
@@ -138,6 +137,9 @@ table td, table th {
   border-top-style: hidden;
   border-bottom-style: hidden;
   font-size: 0.8em;
+}
+.buggy_graphic_button {
+  font-size: 1em;
 }
 
 /*# sourceMappingURL=stylesheet.css.map */

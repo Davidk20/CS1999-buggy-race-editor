@@ -1,5 +1,7 @@
-class buggy_validation():
+import _sqlite3 as sql
 
+class buggy_validation():
+#TODO ensure any fuels of a single capacity are checked for
     def __init__(self,new_buggy):
         self.buggy = new_buggy
         self.test1 = self.numerical_test()
@@ -31,6 +33,7 @@ class buggy_validation():
             return 'success'
 
 
-
+#TODO if colours dont match and the design is plain then show an error
+#TODO non-consumable power sources only need one fuel unit
 if __name__ == '__main__':
     buggy_validation(None)

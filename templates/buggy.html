@@ -26,6 +26,7 @@
             <td>Antibiotic</td>
             <td>Banging Sound System</td>
             <td>Race Computer Algorithm</td>
+            <td>Total Buggy Cost</td>
         </tr>
         {% for record in buggy %}
             <tr>
@@ -33,6 +34,14 @@
                     {% if entry == record[7] or entry==record[8] %}
                         <td style="background-color: {{ entry }}"></td>
                         <td>{{ entry }}</td>
+                    {% elif entry == record[9] %}
+                        <td>
+                            {{ entry }}
+                            <form action="/buggy" method="post">
+                                <input type="submit" class="buggy_graphic_button" value="graphic" name='{{ record[0] }}'>
+                            </form>
+                            <!-- <a href="/graphic" onClick="MyWindow=window.open('/graphic','MyWindow','width=500,height=500'); return false;">View</a> -->
+                        </td>
                     {% else %}
                         <td>{{ entry }}</td>
                     {% endif %}

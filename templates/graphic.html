@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Flag Render</title>
+        <style>
+            .graphic_window{
+                width: 500px;
+                height:500px;
+                background-color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="graphic_window">
+            <div class="flag_container">
+                <canvas id="flag" width="490" height="490" style="border:solid;top:0;left:0;position: fixed">
+                </canvas>
+                {% if flag_vars[0]=='plain' %}
+                    <script>
+                        var c = document.getElementById("flag");
+                        var ctx = c.getContext("2d");
+                        ctx.beginPath();
+                        ctx.fillStyle = "{{flag_vars[1]}}"
+                        ctx.rect(0, 0, 490, 490);
+                        ctx.fill();
+                    </script>
+                {% elif flag_vars[0]=='vstripe' %}
+                    <script>
+                        var c = document.getElementById("flag");
+                        var ctx = c.getContext("2d");
+                        ctx.beginPath()
+                        ctx.rect(0, 0, 98, 490);
+                        ctx.rect(196, 0, 98, 490);
+                        ctx.rect(392, 0, 98, 490);
+                        ctx.fillStyle = "{{flag_vars[1]}}";
+                        ctx.fill();
+                        ctx.beginPath()
+                        ctx.rect(98, 0, 98, 490);
+                        ctx.rect(294, 0, 98, 490);
+                        ctx.fillStyle = "{{flag_vars[2]}}";
+                        ctx.fill();
+                    </script>
+                {% elif flag_vars[0] == 'hstripe' %}
+                    <script>
+                        var c = document.getElementById("flag");
+                        var ctx = c.getContext("2d");
+                        ctx.beginPath()
+                        ctx.rect(0, 0, 490, 98);
+                        ctx.rect(0, 196, 490, 98);
+                        ctx.rect(0, 392, 490, 98);
+                        ctx.fillStyle = "{{flag_vars[1]}}";
+                        ctx.fill();
+                        ctx.beginPath()
+                        ctx.rect(0, 98, 490, 98);
+                        ctx.rect(0, 294, 490, 98);
+                        ctx.fillStyle = "{{flag_vars[2]}}";
+                        ctx.fill();
+                    </script>
+                {% elif flag_vars[0] == 'dstripe' %}
+                    <script>
+                        var c = document.getElementById("flag");
+                        var ctx = c.getContext("2d");
+                        var color1 = "{{flag_vars[1]}}",color2="{{flag_vars[2]}}";
+                        var numberOfStripes = 5;
+                        for (var i=0;i<numberOfStripes*2;i++) {
+                            var thickness = 490 / numberOfStripes;
+                            ctx.beginPath();
+                            ctx.strokeStyle = i % 2 ? color1 : color2;
+                            ctx.lineWidth = thickness;
+                            ctx.lineCap = 'square';
+                            ctx.moveTo(i * thickness + thickness / 2 - 490, 0);
+                            ctx.lineTo(0 + i * thickness + thickness / 2, 490);
+                            ctx.stroke();
+                        }
+                    </script>
+                {% elif flag_vars[0] == 'checker' %}
+                    <canvas id="container" width="98" height="98" style="border-top:solid;border-left:solid;top:0;left:0;position: fixed"></canvas>
+                    <script>
+                        var canvas = document.getElementById("flag")
+                        var context = canvas.getContext("2d");
+                        var canvasPattern = document.getElementById("container");
+                        var contextPattern = canvasPattern.getContext("2d");
+                            contextPattern.beginPath();
+                            contextPattern.rect(0,0,49,49);
+                            contextPattern.rect(49,49,49,49);
+                            contextPattern.fillStyle = '{{ flag_vars[1] }}';
+                            contextPattern.fill();
+                            contextPattern.beginPath();
+                            contextPattern.rect(49,0,49,49);
+                            contextPattern.rect(0,49,49,49);
+                            contextPattern.fillStyle = '{{ flag_vars[2] }}';
+                            contextPattern.fill();
+                        var pattern = context.createPattern(canvasPattern,"repeat");
+                        context.fillStyle = pattern;
+                        context.fillRect(0, 0, 490, 490);
+                        context.fill();
+                    </script>
+                {% elif flag_vars[0] == 'spot'%}
+                    <canvas id="container" width="196" height="196" style="border-top:solid;border-left:solid;top:0;left:0;position: fixed"></canvas>
+                    <script>
+                        var canvas = document.getElementById("flag")
+                        var context = canvas.getContext("2d");
+                        var canvasPattern = document.getElementById("container");
+                        var contextPattern = canvasPattern.getContext("2d");
+                            contextPattern.beginPath();
+                            contextPattern.rect(0,0,196,196);
+                            contextPattern.fillStyle = '{{ flag_vars[1] }}';
+                            contextPattern.fill();
+                            contextPattern.beginPath();
+                            contextPattern.arc(50, 50, 50, 0, 2 * Math.PI);
+                            contextPattern.fillStyle = '{{ flag_vars[2] }}';
+
+                            /*
+
+
+                            contextPattern.rect(98,0,98,98);
+                            contextPattern.rect(0,98,98,98);
+                            contextPattern.fillStyle = '{{ flag_vars[2] }}';
+                            */
+                            contextPattern.fill();
+
+                        var pattern = context.createPattern(canvasPattern,"repeat");
+                        context.fillStyle = pattern;
+                        context.fillRect(0, 0, 490, 490);
+                        context.fill();
+                    </script>
+                {% endif %}
+
+            </div>
+        </div>
+    </body>
+</html>

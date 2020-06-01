@@ -16,7 +16,7 @@
             <label for="armour">Type of Armour</label>
             <select name="armour" class="select_form">
                 {% for i in [["None","none"], ["Wood","wood"], ["Aluminium","aluminium"], ["Thin Steel","thinsteel"], ["Thick Steel","thicksteel"], ["Titanium","titanium"]] %}
-                    {% if value_fills[3] == i[1] %}
+                    {% if value_fills[11] == i[1] %}
                         <option selected="selected" value={{i[1]}}>{{i[0]}}</option>
                     {% else %}
                         <option value={{i[1]}}>{{i[0]}}</option>
@@ -29,7 +29,7 @@
             <label for="tyres">Type of Tyres</label>
             <select name="tyres" class="select_form">
                 {% for i in [["Knobbly","knobbly"], ["Slick","slick"], ["Steel Band","steelband"], ["Reactive","reactive"], ["Maglev","maglev"]] %}
-                    {% if value_fills[3] == i[1] %}
+                    {% if value_fills[9] == i[1] %}
                         <option selected="selected" value={{i[1]}}>{{i[0]}}</option>
                     {% else %}
                         <option value={{i[1]}}>{{i[0]}}</option>
@@ -39,7 +39,7 @@
             </select>
 
             <label for="qty_tyres">Number of tyres:</label>
-            <input required title="qty_tyres" type="number" name="qty_tyres" min="4" value="4">
+            <input required title="qty_tyres" type="number" name="qty_tyres" min="4" value="{{value_fills[10]}}">
 
             <br>
 
@@ -76,7 +76,7 @@
             <br>
 
             <label for="flag_color_primary">Flag's primary colour:</label>
-            <input type="color" name="flag_color_primary" value={{value_fills[5]}}>
+            <input type="color" name="flag_color_primary" value={{value_fills[6]}}>
 
             <label for="power_units">Flag's secondary colour:</label>
             <input type="color" name="flag_color_secondary" value={{value_fills[7]}}>
@@ -86,7 +86,7 @@
             <label for="flag_pattern">Flag's pattern:</label>
             <select name="flag_pattern" class="select_form">
                 {% for i in [['plain','Plain'],['vstripe','Vertical Stripes'],['hstripe','Horizontal Stripes'],['dstripe','Diagonal Stripes'],['checker','Checkered'],['spot','Spots'],] %}
-                    {% if value_fills[6] == i[0] %}
+                    {% if value_fills[8] == i[0] %}
                         <option selected="selected" value={{i[0]}}>{{i[1]}}</option>
                     {% else %}
                         <option value={{i[0]}}>{{i[1]}}</option>
@@ -97,7 +97,7 @@
             <label>Race computer algorithm</label>
             <select name="algo" class="select_form">
                 {% for i in [['steady','Steady'],['defensive','Defensive'],['offensive','Offensive'],['titfortat','Tit for Tat'],['random','Random']] %}
-                    {% if value_fills[3] == i[0] %}
+                    {% if value_fills[18] == i[0] %}
                         <option selected="selected" value={{i[0]}}>{{i[1]}}</option>
                     {% else %}
                         <option value={{i[0]}}>{{i[1]}}</option>
@@ -110,7 +110,7 @@
             <label for="attack">Offensive capability</label>
             <select name="attack">
                 {% for i in [['none','None'],['spike','Spike'],['flame','Flame'],['charge','Charge'],['biohazard','Biohazard']] %}
-                    {% if value_fills[3] == i[0] %}
+                    {% if value_fills[12] == i[0] %}
                         <option selected="selected" value={{i[0]}}>{{i[1]}}</option>
                     {% else %}
                         <option value={{i[0]}}>{{i[1]}}</option>
@@ -119,40 +119,60 @@
             </select>
 
             <label for="qty_attack">Number of attacks</label>
-            <input type="number" value="0" name="qty_attacks">
+            <input type="number" value="0" name="qty_attacks" value="{{value_fills[13]}}">
 
             <br>
 
             <label for="attack">Fireproof?</label>
             <select name="fireproof">
-                <option value="True">True</option>
-                <option selected="selected" value="False">False</option>
+                {% for i in [['true','True'],['false','False']] %}
+                    {% if value_fills[14] == i[0] %}
+                        <option selected="selected" value={{i[0]}}>{{i[1]}}</option>
+                    {% else %}
+                        <option value={{i[0]}}>{{i[1]}}</option>
+                    {% endif %}
+                {% endfor %}
             </select>
 
             <label for="attack">Insulated?</label>
             <select name="insulated">
-                <option value="True">True</option>
-                <option selected="selected" value="False">False</option>
+                {% for i in [['true','True'],['false','False']] %}
+                    {% if value_fills[15] == i[0] %}
+                        <option selected="selected" value={{i[0]}}>{{i[1]}}</option>
+                    {% else %}
+                        <option value={{i[0]}}>{{i[1]}}</option>
+                    {% endif %}
+                {% endfor %}
             </select>
 
             <br>
 
             <label for="attack">Antibiotic?</label>
             <select name="antibiotic">
-                <option value="True">True</option>
-                <option selected="selected" value="False">False</option>
+                {% for i in [['true','True'],['false','False']] %}
+                    {% if value_fills[14] == i[0] %}
+                        <option selected="selected" value={{i[0]}}>{{i[1]}}</option>
+                    {% else %}
+                        <option value={{i[0]}}>{{i[1]}}</option>
+                    {% endif %}
+                {% endfor %}
             </select>
 
             <label for="attack">Banging Sound System?</label>
             <select name="banging">
-                <option value="True">True</option>
-                <option selected="selected" value="False">False</option>
+                {% for i in [['true','True'],['false','False']] %}
+                    {% if value_fills[14] == i[0] %}
+                        <option selected="selected" value={{i[0]}}>{{i[1]}}</option>
+                    {% else %}
+                        <option value={{i[0]}}>{{i[1]}}</option>
+                    {% endif %}
+                {% endfor %}
             </select>
 
             <br>
 
             <label for="hamster_booster">Hamster Booster?</label>
-            <input type="number" name="hamster_booster" min="0"value="0">
+            <input type="number" name="hamster_booster" min="0"value="{{ value_fills[5]}}">
 
             <br>
             <input type="submit" class="button">

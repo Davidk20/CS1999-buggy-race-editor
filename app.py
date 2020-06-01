@@ -1,18 +1,19 @@
 from flask import Flask, render_template, request, jsonify, g
 import sqlite3 as sql
 from form_validation import buggy_validation
-import random
+#from cost_method import cost_method
 app = Flask(__name__)
 DATABASE_FILE = "database.db"
-DEFAULT_BUGGY_ID = "1"
 BUGGY_RACE_SERVER_URL = "http://rhul.buggyrace.net"
 value_fills=[]
 new_buggy=[]
 #TODO 2-RULES - Game rules not setup yet and so cant add validation
 #TODO 3-AUTOFILL - rules not set so cant autofill valid data
+#TODO after deleting buggies, fix counter for id so that buggies will always fill current gaps
 
 
 def fill_form(buggy):
+    #TODO use this as standalone function to fill values for form so variables can be global and independent so anything can use it
     con = sql.connect(DATABASE_FILE)
     con.row_factory = sql.Row
     cur = con.cursor()
@@ -113,13 +114,15 @@ def show_buggies():
         for key, value in command.items():
             temp = [key, value]
             command_list.append(temp)
-        print(command_list[0][1])
         if command_list[0][1] == 'Modify':
             buggy = fill_form(command_list[0][0])
             return render_template("buggy-form.html", value_fills=buggy)
         elif command_list[0][1] == 'Delete':
             msg = delete_buggy(command_list[0][0])
             return render_template("updated.html", msg=msg, deleted=True)
+        elif command_list[0][1] == 'graphic':
+            flag_vars=display_graphic(command_list[0][0])
+            return render_template("graphic.html", flag_vars=flag_vars)
 #TODO create custom div for user to view flags using template patterns and pass colours through from list into the styles
 
 #------------------------------------------------------------
@@ -161,7 +164,7 @@ def summary():
 #------------------------------------------------------------
 
 
-@app.route('/delete', methods = ['POST'])
+@app.route('/delete')
 def delete_buggy(buggy_id):
     try:
         msg = "deleting buggy"
@@ -178,5 +181,20 @@ def delete_buggy(buggy_id):
         return msg
 
 
+@app.route('/graphic')
+def display_graphic(buggy_id):
+    con = sql.connect(DATABASE_FILE)
+    con.row_factory = sql.Row
+    cur = con.cursor()
+    cur.execute("SELECT flag_color_primary,flag_pattern,flag_color_secondary FROM buggies WHERE id=?", (buggy_id,))
+    result = cur.fetchall();
+    flag_vars = [result[0][0], result[0][1], result[0][2]]
+    flag_vars = [flag_vars[1], flag_vars[0], flag_vars[2]]
+    print(flag_vars)
+    return flag_vars
+    #return render_template("graphic.html",flag_vars=flag_vars)
+
 if __name__ == '__main__':
     app.run(debug = True, host="0.0.0.0")
+
+#TODO wrap button in a tag to simletaneously trigger and submit the submitted id into varioable so i can use it to choose which flag to render
