@@ -1,16 +1,17 @@
 from flask import Flask, render_template, request, jsonify, g
 import sqlite3 as sql
 from form_validation import buggy_validation
-#from cost_method import cost_method
+from cost_method import cost_method
 app = Flask(__name__)
 DATABASE_FILE = "database.db"
 BUGGY_RACE_SERVER_URL = "http://rhul.buggyrace.net"
 value_fills=[]
 new_buggy=[]
-#TODO 2-RULES - Game rules not setup yet and so cant add validation
 #TODO 3-AUTOFILL - rules not set so cant autofill valid data
 #TODO after deleting buggies, fix counter for id so that buggies will always fill current gaps
-
+#TODO centralise all pages
+#TODO add button to go from buggy created to buggy table page
+#TODO add tooltips onto forms
 
 def fill_form(buggy):
     #TODO use this as standalone function to fill values for form so variables can be global and independent so anything can use it
@@ -69,6 +70,10 @@ def create_buggy():
         algo = request.form['algo']
         new_buggy=[qty_wheels,power_type,power_units,aux_power_type,aux_power_units,hamster_booster,flag_color_primary,flag_pattern,flag_color_secondary,tyres,qty_tyres,armour,attack,qty_attacks,fireproof,insulated,antibiotic,banging,algo]
         result = buggy_validation(new_buggy)
+        total = cost_method(new_buggy)
+        cost = total.buggy_cost()
+        costs = str(cost[0])+' / '+str(cost[1])
+        new_buggy.append(costs)
         if result.passback() == 'error':
             msg="error in update operation"
             fix_entry=True
@@ -81,17 +86,15 @@ def create_buggy():
                     cur = con.cursor()
                     cur.execute("SELECT id FROM buggies ORDER BY id DESC LIMIT 1")
                     latest_id = cur.fetchone()
-                    cur.execute(
-                        "INSERT INTO buggies (qty_wheels,power_type,power_units,aux_power_type,aux_power_units,hamster_booster,flag_color_primary,flag_pattern,flag_color_secondary,tyres,qty_tyres,armour,attack,qty_attacks,fireproof,insulated,antibiotic,banging,algo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                        (qty_wheels,power_type,power_units,aux_power_type,aux_power_units,hamster_booster,flag_color_primary,flag_pattern,flag_color_secondary,tyres,qty_tyres,armour,attack,qty_attacks,fireproof,insulated,antibiotic,banging,algo))
+                    cur.execute("INSERT INTO buggies (qty_wheels,power_type,power_units,aux_power_type,aux_power_units,hamster_booster,flag_color_primary,flag_pattern,flag_color_secondary,tyres,qty_tyres,armour,attack,qty_attacks,fireproof,insulated,antibiotic,banging,algo,total_cost) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",(qty_wheels,power_type,power_units,aux_power_type,aux_power_units,hamster_booster,flag_color_primary,flag_pattern,flag_color_secondary,tyres,qty_tyres,armour,attack,qty_attacks,fireproof,insulated,antibiotic,banging,algo,costs))
                     con.commit()
                     msg = "Record successfully saved"
             except:
-              con.rollback()
-              msg = "error in update operation"
+                con.rollback()
+                msg = "error in update operation"
             finally:
-              con.close()
-            return render_template("updated.html", msg = msg, fix_entry=False)
+                con.close()
+                return render_template("updated.html", msg = msg, fix_entry=False)
 
 
 #------------------------------------------------------------
@@ -106,7 +109,7 @@ def show_buggies():
         con.row_factory = sql.Row
         cur = con.cursor()
         cur.execute("SELECT * FROM buggies")
-        record = cur.fetchall();
+        record = cur.fetchall()
         return render_template("buggy.html", buggy = record)
     elif request.method == 'POST':
         command = request.form
@@ -190,7 +193,6 @@ def display_graphic(buggy_id):
     result = cur.fetchall();
     flag_vars = [result[0][0], result[0][1], result[0][2]]
     flag_vars = [flag_vars[1], flag_vars[0], flag_vars[2]]
-    print(flag_vars)
     return flag_vars
     #return render_template("graphic.html",flag_vars=flag_vars)
 
