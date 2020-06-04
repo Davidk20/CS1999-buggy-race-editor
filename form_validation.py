@@ -16,9 +16,11 @@ class buggy_validation():
 
 
     def numerical_test(self):
-        if int(self.buggy[0])%2 != 0:
+        if int(self.buggy[0]) % 2 != 0:
             return 'fail'
         elif int(self.buggy[10])<int(self.buggy[0]):
+            return 'fail'
+        elif int(self.buggy[0])<4:
             return 'fail'
         else:
             return 'success'
@@ -57,5 +59,3 @@ class buggy_validation():
                     else:
                         pass
             return 'success'
-if __name__ == '__main__':
-    buggy_validation(None)

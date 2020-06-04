@@ -1,19 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-  <h1>Updated Buggy</h1>
-
-  <p>
-    {{ msg }}
-  </p>
-  <p>
-    {% if fix_entry==True %}
-        <a href="/new" class="button">Return to Form</a>
-    {% elif deleted ==True %}
-        <a href="/buggy" class="button">Return to Buggies</a>
-    {% endif %}
-    <a href="/" class="button">Home</a>
-  </p>
-
+    <h1>Updated Buggy</h1>
+    <div class="spacer">
+        <p>
+            {{ msg }}
+        </p>
+        <p>
+            {% if fix_entry==True %}
+                <a href="/new" class="button">Return to Form</a>
+            {% elif deleted ==True %}
+                <a href="/buggy" class="button">Return to Buggies</a>
+            {% endif %}
+            <a href="/" class="button">Home</a>
+        </p>
+    </div>
 {% endblock %}

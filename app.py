@@ -94,7 +94,7 @@ def create_buggy():
                 msg = "error in update operation"
             finally:
                 con.close()
-                return render_template("updated.html", msg = msg, fix_entry=False)
+                return render_template("updated.html", msg = msg, fix_entry=False, deleted=True)
 
 
 #------------------------------------------------------------

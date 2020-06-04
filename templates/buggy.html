@@ -3,7 +3,11 @@
 {% block content %}
 
     <h1>List of Buggies</h1>
-
+    <div class="spacer">
+        <p>
+            <a href="/" class="button">Home</a>
+        </p>
+    </div>
     <table class="buggy_list">
         <tr>
             <td>ID</td>
@@ -53,9 +57,4 @@
             </tr>
         {% endfor %}
     </table>
-
-    <p>
-        <a href="/" class="button">Home</a>
-    </p>
-
 {% endblock %}

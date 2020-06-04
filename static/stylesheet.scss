@@ -11,6 +11,7 @@ body {
     padding: 0;
     font-size: 1.2em;
     color: #000000;
+
 }
 
 .main-content {
@@ -118,7 +119,7 @@ table td, table th {
   padding: 0.5rem;
 }
 
-.spacer {
+.spacer{
     display: block;
     margin: 3em auto 3em auto;
     text-align: center;
@@ -147,4 +148,9 @@ table td, table th {
 }
 .buggy_graphic_button{
     font-size:1em;
+}
+img{
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
 }
