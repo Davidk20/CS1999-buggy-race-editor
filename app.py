@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, jsonify, g
+from flask import Flask, render_template, request, jsonify, flash, url_for, redirect, Blueprint
+from flask_login import login_required,current_user
 import sqlite3 as sql
 from form_validation import buggy_validation
 from cost_method import cost_method
-app = Flask(__name__)
+main = Blueprint('main',__name__)
 DATABASE_FILE = "database.db"
 BUGGY_RACE_SERVER_URL = "http://rhul.buggyrace.net"
 value_fills=[]
@@ -12,9 +13,11 @@ new_buggy=[]
 #TODO centralise all pages
 #TODO add button to go from buggy created to buggy table page
 #TODO add tooltips onto forms
+#TODO load users database on initialisation to allow js to parse through for UAC
+#TODO custom 404 page
 
 def fill_form(buggy):
-    #TODO use this as standalone function to fill values for form so variables can be global and independent so anything can use it
+    #TODO turn into class to fill values for form so variables can be global and independent so anything can use it
     con = sql.connect(DATABASE_FILE)
     con.row_factory = sql.Row
     cur = con.cursor()
@@ -30,50 +33,43 @@ def fill_form(buggy):
     except:
         value_fills=[]
     return value_fills
+
+
+
 #------------------------------------------------------------
 # the index page
 #------------------------------------------------------------
-@app.route('/')
+@main.route('/')
 def home():
-    return render_template('index.html', server_url=BUGGY_RACE_SERVER_URL)
+    try:
+        name = current_user.name
+    except AttributeError:
+        name = "Guest"
+    return render_template('index.html', server_url=BUGGY_RACE_SERVER_URL, name=name)
 
 #------------------------------------------------------------
 # creating a new buggy:
 #  if it's a POST request process the submitted data
 #  but if it's a GET request, just show the form
 #------------------------------------------------------------
-@app.route('/new', methods = ['POST', 'GET'])
+@main.route('/new', methods = ['POST', 'GET'])
 def create_buggy():
     if request.method == 'GET':
         value_fills = fill_form(None)
         return render_template("buggy-form.html",value_fills=value_fills)
     elif request.method == 'POST':
         msg=""
-        qty_wheels = request.form['qty_wheels']
-        power_type = request.form['power_type']
-        power_units = request.form['power_units']
-        aux_power_type = request.form['aux_power_type']
-        aux_power_units = request.form['aux_power_units']
-        hamster_booster = request.form['hamster_booster']
-        flag_color_primary = request.form['flag_color_primary']
-        flag_pattern = request.form['flag_pattern']
-        flag_color_secondary = request.form['flag_color_secondary']
-        tyres = request.form['tyres']
-        qty_tyres = request.form['qty_tyres']
-        armour = request.form['armour']
-        attack = request.form['attack']
-        qty_attacks = request.form['qty_attacks']
-        fireproof = request.form['fireproof']
-        insulated = request.form['insulated']
-        antibiotic = request.form['antibiotic']
-        banging = request.form['banging']
-        algo = request.form['algo']
-        new_buggy=[qty_wheels,power_type,power_units,aux_power_type,aux_power_units,hamster_booster,flag_color_primary,flag_pattern,flag_color_secondary,tyres,qty_tyres,armour,attack,qty_attacks,fireproof,insulated,antibiotic,banging,algo]
+        new_buggy=[]
+        for parameter in ['qty_wheels','power_type','power_units','aux_power_type','aux_power_units','hamster_booster','flag_color_primary','flag_pattern','flag_color_secondary','tyres','qty_tyres','armour','attack','qty_attacks','fireproof','insulated','antibiotic','banging','algo']:
+            result = request.form.get(parameter)
+            new_buggy.append(result)
+
         result = buggy_validation(new_buggy)
         total = cost_method(new_buggy)
         cost = total.buggy_cost()
         costs = str(cost[0])+' / '+str(cost[1])
         new_buggy.append(costs)
+        new_buggy.append(current_user.id)
         if result.passback() == 'error':
             msg="error in update operation"
             fix_entry=True
@@ -81,12 +77,9 @@ def create_buggy():
             #TODO find some way of leaving user data in forms if there is an incomplete buggy submit
         elif result.passback() == 'success':
             try:
-                msg = f"qty_wheels={qty_wheels}"
                 with sql.connect(DATABASE_FILE) as con:
                     cur = con.cursor()
-                    cur.execute("SELECT id FROM buggies ORDER BY id DESC LIMIT 1")
-                    latest_id = cur.fetchone()
-                    cur.execute("INSERT INTO buggies (qty_wheels,power_type,power_units,aux_power_type,aux_power_units,hamster_booster,flag_color_primary,flag_pattern,flag_color_secondary,tyres,qty_tyres,armour,attack,qty_attacks,fireproof,insulated,antibiotic,banging,algo,total_cost) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",(qty_wheels,power_type,power_units,aux_power_type,aux_power_units,hamster_booster,flag_color_primary,flag_pattern,flag_color_secondary,tyres,qty_tyres,armour,attack,qty_attacks,fireproof,insulated,antibiotic,banging,algo,costs))
+                    cur.execute("INSERT INTO buggies (qty_wheels,power_type,power_units,aux_power_type,aux_power_units,hamster_booster,flag_color_primary,flag_pattern,flag_color_secondary,tyres,qty_tyres,armour,attack,qty_attacks,fireproof,insulated,antibiotic,banging,algo,total_cost,user_id) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",[new_buggy[0],new_buggy[1],new_buggy[2],new_buggy[3],new_buggy[4],new_buggy[5],new_buggy[6],new_buggy[7],new_buggy[8],new_buggy[9],new_buggy[10],new_buggy[11],new_buggy[12],new_buggy[13],new_buggy[14],new_buggy[15],new_buggy[16],new_buggy[17],new_buggy[18],new_buggy[19],new_buggy[20],])
                     con.commit()
                     msg = "Record successfully saved"
             except:
@@ -102,13 +95,14 @@ def create_buggy():
 #------------------------------------------------------------
 
 
-@app.route('/buggy', methods = ['POST', 'GET'])
+@main.route('/buggy', methods = ['POST', 'GET'])
+@login_required
 def show_buggies():
     if request.method == 'GET':
         con = sql.connect(DATABASE_FILE)
         con.row_factory = sql.Row
         cur = con.cursor()
-        cur.execute("SELECT * FROM buggies")
+        cur.execute("SELECT id,qty_wheels,power_type,power_units,aux_power_type,aux_power_units,hamster_booster,flag_color_primary,flag_color_secondary,flag_pattern,tyres,qty_tyres,armour,attack,qty_attacks,fireproof,insulated,antibiotic,banging,algo,total_cost FROM buggies WHERE user_id=?",(current_user.id,))
         record = cur.fetchall()
         return render_template("buggy.html", buggy = record)
     elif request.method == 'POST':
@@ -133,9 +127,7 @@ def show_buggies():
 #------------------------------------------------------------
 
 
-@app.route('/new')
-def edit_buggy():
-    return render_template("buggy-form.html")
+
 
 
 #------------------------------------------------------------
@@ -146,12 +138,16 @@ def edit_buggy():
 #------------------------------------------------------------
 
 
-@app.route('/json')
+@main.route('/json')
+@login_required
 def summary():
     con = sql.connect(DATABASE_FILE)
     con.row_factory = sql.Row
     cur = con.cursor()
-    cur.execute("SELECT * FROM buggies WHERE id=10 LIMIT 1")
+    cur.execute("SELECT qty_wheels,power_type,power_units,aux_power_type,aux_power_units,hamster_booster,flag_color_primary,flag_pattern,flag_color_secondary,tyres,qty_tyres,armour,attack,qty_attacks,fireproof,insulated,antibiotic,banging,algo FROM buggies WHERE user_id=? ORDER BY id DESC LIMIT 1",(current_user.id,))
+    if cur.fetchone() == None:
+        flash('No buggies found please create a buggy before requesting JSON','warning')
+        return render_template('index.html')
     return jsonify(
         {k: v for k, v in dict(zip(
           [column[0] for column in cur.description], cur.fetchone())).items()
@@ -167,7 +163,7 @@ def summary():
 #------------------------------------------------------------
 
 
-@app.route('/delete')
+@main.route('/delete')
 def delete_buggy(buggy_id):
     try:
         msg = "deleting buggy"
@@ -184,7 +180,7 @@ def delete_buggy(buggy_id):
         return msg
 
 
-@app.route('/graphic')
+@main.route('/graphic')
 def display_graphic(buggy_id):
     con = sql.connect(DATABASE_FILE)
     con.row_factory = sql.Row

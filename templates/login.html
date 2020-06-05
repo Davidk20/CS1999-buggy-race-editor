@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="title">Buggy Editor</h1>
+    <h2>Login</h2>
+    <img src="static/hamster.png" width="150" height="175">
+    <div class="spacer">
+        <div class="account_form_container">
+            <form action="/login" method="post" class="account_form">
+                <label for="username">Username</label>
+                <input type="text" name="username" required>
+                <br>
+                <label for="password">Password</label>
+                <input type="password" name="password" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,30 +1,30 @@
 html {
     margin: 0;
     padding: 0;
-    background: #a7a5a5;
+    background: #eaeaea;
+    min-height:100vh;
+    font-family: "Source Sans Pro", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 body {
-    font-family: "Source Sans Pro", "Helvetica Neue", Arial, Helvetica, sans-serif;
     margin-left: auto;
     margin-right: auto;
     padding: 0;
     font-size: 1.2em;
     color: #000000;
-
 }
 
 .main-content {
-    min-height: 100vh;
     padding: 1em;
-    background: white;
 
 }
 
 h1 {
     text-align: center;
 }
-
+h2{
+    text-align: center;
+}
 p {
     margin: 1em 0;
 }
@@ -153,4 +153,76 @@ img{
     display: block;
     margin-right: auto;
     margin-left: auto;
+}
+.spacer_left{
+    display: inline-block;
+    float: left;
+    width:50%;
+}
+.spacer_right{
+    display: inline-block;
+    float: right;
+    width:50%;
+}
+.account_form_container{
+    text-align: center;
+    input[type=text]{
+        width:250px;
+    }
+    input[type=password]{
+        width:250px;
+    }
+    button{
+        background-color: #99ff99;
+        display:block;
+        width: 100px;
+        text-align: center;
+        font-size: 1.25em;
+        border: solid black;
+        border-radius:4px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    button:hover{
+        background-color: black;
+        color: white;
+        cursor: pointer;
+    }
+}
+.flash_alert_container{
+    margin-right: 17%;
+    margin-left: auto;
+    display: inline-block;
+    padding:2px;
+    text-align: center;
+    .flash_alert{
+        min-width:600px;
+        background-color:rgba(255, 0, 0, 0.6);
+        display: inline-block;
+        float: left;
+        text-align: center;
+
+    }
+    .flash_close{
+        display: inline-block;
+        float: right;
+        margin-left: 20px;
+        cursor: pointer;
+    }
+}
+header{
+    background-color: #ffe66f;
+    position: fixed;
+    top:0;
+    width: 100%;
+    text-align: right;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    a{
+        text-decoration: none;
+        padding-right: 1em;
+    }
+    a:visited{
+        color:black;
+    }
 }
