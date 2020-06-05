@@ -15,7 +15,7 @@ def login():
         return render_template('login.html')
     elif request.method == 'POST':
         username = request.form.get('username')
-        username = username.lower( )
+        username = username.lower()
         password = request.form.get('password')
         con = sql.connect(DATABASE_FILE)
         con.row_factory = sql.Row
@@ -36,6 +36,8 @@ def signup():
     if request.method == 'GET':
         return render_template('signup.html')
     elif request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
         username = request.form['username']
         password = request.form['password']
         conf_pass = request.form.get('confirmed_password', False)
@@ -50,18 +52,18 @@ def signup():
             accounts = cur.fetchall()
             for user in range(len(accounts)):
                 if username == accounts[user][2]:
-                    flash('User already exists', 'warning')
-                    return render_template('signup.html')
-                elif username == accounts[user][4]:
                     flash('Account name already in use', 'warning')
                     return render_template('signup.html')
+                elif email == accounts[user][4]:
+                    flash('Account already exists', 'warning')
+                    return render_template('login.html')
 
             password = generate_password_hash(password)
             try:
                 con = sql.connect(DATABASE_FILE)
                 con.row_factory = sql.Row
                 cur = con.cursor()
-                cur.execute("INSERT INTO users (username,password) VALUES(?,?)",(username,password))
+                cur.execute("INSERT INTO users (name, username, password, email) VALUES(?,?,?,?)",(name,username,password,email))
                 con.commit()
             except:
                 flash('Error in account creation', 'warning')

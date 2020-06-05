@@ -8,12 +8,11 @@ DATABASE_FILE = "database.db"
 BUGGY_RACE_SERVER_URL = "http://rhul.buggyrace.net"
 value_fills=[]
 new_buggy=[]
+updated_id=0
 #TODO 3-AUTOFILL - rules not set so cant autofill valid data
 #TODO after deleting buggies, fix counter for id so that buggies will always fill current gaps
-#TODO centralise all pages
-#TODO add button to go from buggy created to buggy table page
+
 #TODO add tooltips onto forms
-#TODO load users database on initialisation to allow js to parse through for UAC
 #TODO custom 404 page
 
 def fill_form(buggy):
@@ -90,6 +89,40 @@ def create_buggy():
                 return render_template("updated.html", msg = msg, fix_entry=False, deleted=True)
 
 
+
+@main.route('/update', methods = ['POST', 'GET'])
+def update_buggy():
+    if request.method == 'POST':
+        msg=""
+        new_buggy=[]
+        for parameter in ['qty_wheels','power_type','power_units','aux_power_type','aux_power_units','hamster_booster','flag_color_primary','flag_pattern','flag_color_secondary','tyres','qty_tyres','armour','attack','qty_attacks','fireproof','insulated','antibiotic','banging','algo']:
+            result = request.form.get(parameter)
+            new_buggy.append(result)
+        result = buggy_validation(new_buggy)
+        total = cost_method(new_buggy)
+        cost = total.buggy_cost()
+        costs = str(cost[0])+' / '+str(cost[1])
+        new_buggy.append(costs)
+        if result.passback() == 'error':
+            msg="error in update operation - Invalid Buggy configured"
+            fix_entry=True
+            return render_template("updated.html", msg=msg,fix_entry=fix_entry)
+            #TODO find some way of leaving user data in forms if there is an incomplete buggy submit
+        elif result.passback() == 'success':
+            #try:
+                with sql.connect(DATABASE_FILE) as con:
+                    cur = con.cursor()
+                    print(updated_id)
+                    cur.execute("UPDATE buggies SET qty_wheels=?,power_type=?,power_units=?,aux_power_type=?,aux_power_units=?,hamster_booster=?,flag_color_primary=?,flag_pattern=?,flag_color_secondary=?,tyres=?,qty_tyres=?,armour=?,attack=?,qty_attacks=?,fireproof=?,insulated=?,antibiotic=?,banging=?,algo=?,total_cost=? WHERE id=?",([new_buggy[0],new_buggy[1],new_buggy[2],new_buggy[3],new_buggy[4],new_buggy[5],new_buggy[6],new_buggy[7],new_buggy[8],new_buggy[9],new_buggy[10],new_buggy[11],new_buggy[12],new_buggy[13],new_buggy[14],new_buggy[15],new_buggy[16],new_buggy[17],new_buggy[18],new_buggy[19],updated_id]))
+                    con.commit()
+                    msg = "Record successfully saved"
+            #except:
+             #   con.rollback()
+             #   msg = "error in update operation"
+            #finally:
+                con.close()
+                return render_template("updated.html", msg = msg, fix_entry=False, deleted=True)
+
 #------------------------------------------------------------
 # a page for displaying the buggy
 #------------------------------------------------------------
@@ -113,7 +146,9 @@ def show_buggies():
             command_list.append(temp)
         if command_list[0][1] == 'Modify':
             buggy = fill_form(command_list[0][0])
-            return render_template("buggy-form.html", value_fills=buggy)
+            global updated_id
+            updated_id=command_list[0][0]
+            return render_template("buggy_update.html", value_fills=buggy)
         elif command_list[0][1] == 'Delete':
             msg = delete_buggy(command_list[0][0])
             return render_template("updated.html", msg=msg, deleted=True)
@@ -145,16 +180,16 @@ def summary():
     con.row_factory = sql.Row
     cur = con.cursor()
     cur.execute("SELECT qty_wheels,power_type,power_units,aux_power_type,aux_power_units,hamster_booster,flag_color_primary,flag_pattern,flag_color_secondary,tyres,qty_tyres,armour,attack,qty_attacks,fireproof,insulated,antibiotic,banging,algo FROM buggies WHERE user_id=? ORDER BY id DESC LIMIT 1",(current_user.id,))
-    if cur.fetchone() == None:
-        flash('No buggies found please create a buggy before requesting JSON','warning')
+    try:
+        return jsonify(
+            {k: v for k, v in dict(zip(
+              [column[0] for column in cur.description], cur.fetchone())).items()
+              if (v != "" and v is not None)
+            }
+          )
+    except TypeError:
+        flash('No records found, please create a buggy before requesting JSON')
         return render_template('index.html')
-    return jsonify(
-        {k: v for k, v in dict(zip(
-          [column[0] for column in cur.description], cur.fetchone())).items()
-          if (v != "" and v is not None)
-        }
-      )
-
 #------------------------------------------------------------
 # delete the buggy
 #   don't want DELETE here, because we're anticipating

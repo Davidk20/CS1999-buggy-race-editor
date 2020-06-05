@@ -4,15 +4,11 @@
 
 {% block content %}
 
-    <h1 class="title">Buggy Construction</h1>
+    <h1 class="title">Buggy Update</h1>
     <div class="buggy_form">
-        <form action="/new" method="post" class="new_buggy_form">
-        <!-- TODO create some form of tooltip for hints about formatting in entry boxes-->
-        <!-- TODO use spin and radioboxes to create entries that require less testing to ensure theyre correct-->
-
+        <form action="/update" method="POST" class="new_buggy_form">
             <label for="qty_wheels">Number of wheels:</label>
             <input required title="qty_wheels" type="number" name="qty_wheels" placeholder="4" min="4" step="2" value={{value_fills[0]}}>
-
             <label for="armour">Type of Armour</label>
             <select name="armour" class="select_form">
                 {% for i in [["None","none"], ["Wood","wood"], ["Aluminium","aluminium"], ["Thin Steel","thinsteel"], ["Thick Steel","thicksteel"], ["Titanium","titanium"]] %}
@@ -23,7 +19,6 @@
                     {% endif %}
                 {% endfor %}
             </select>
-
             <br>
 
             <label for="tyres">Type of Tyres</label>

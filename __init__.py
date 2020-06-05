@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, jsonify, flash, url_for, redirect, Blueprint
-from flask_bcrypt import Bcrypt
-from flask_login import LoginManager, UserMixin
+from flask_login import LoginManager
 import sqlite3 as sql
 from .form_validation import buggy_validation
 from .cost_method import cost_method
