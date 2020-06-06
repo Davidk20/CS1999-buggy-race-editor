@@ -7,8 +7,6 @@
     <h1 class="title">Buggy Construction</h1>
     <div class="buggy_form">
         <form action="/new" method="post" class="new_buggy_form">
-        <!-- TODO create some form of tooltip for hints about formatting in entry boxes-->
-        <!-- TODO use spin and radioboxes to create entries that require less testing to ensure theyre correct-->
 
             <label for="qty_wheels">Number of wheels:</label>
             <input required title="qty_wheels" type="number" name="qty_wheels" placeholder="4" min="4" step="2" value={{value_fills[0]}}>
@@ -39,7 +37,7 @@
             </select>
 
             <label for="qty_tyres">Number of tyres:</label>
-            <input required title="qty_tyres" type="number" name="qty_tyres" min="4" value="{{value_fills[10]}}">
+            <input required title="qty_tyres" type="number" name="qty_tyres" min="4" value="{{value_fills[10]}}" placeholder="4">
 
             <br>
 
@@ -55,7 +53,7 @@
             </select>
 
             <label for="power_units">Primary motive power units:</label>
-            <input required type="number" name="power_units" min="1" value={{value_fills[2]}}>
+            <input required type="number" name="power_units" min="1" placeholder="1" value={{value_fills[2]}}>
 
             <br>
 
@@ -71,7 +69,7 @@
             </select>
 
             <label for="aux_power_units">Auxillery motive power units:</label>
-            <input required type="number" name="aux_power_units" min="0" value={{value_fills[4]}}>
+            <input required type="number" name="aux_power_units" min="0" placeholder="0" value={{value_fills[4]}}>
 
             <br>
 
@@ -172,7 +170,7 @@
             <br>
 
             <label for="hamster_booster">Hamster Booster?</label>
-            <input type="number" name="hamster_booster" min="0"value="{{ value_fills[5]}}">
+            <input type="number" name="hamster_booster" min="0" placeholder="0" value="{{ value_fills[5]}}">
 
             <br>
             <input type="submit" class="button">

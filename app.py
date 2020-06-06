@@ -3,36 +3,17 @@ from flask_login import login_required,current_user
 import sqlite3 as sql
 from form_validation import buggy_validation
 from cost_method import cost_method
+from fill_form import fill_form
 main = Blueprint('main',__name__)
 DATABASE_FILE = "database.db"
 BUGGY_RACE_SERVER_URL = "http://rhul.buggyrace.net"
 value_fills=[]
 new_buggy=[]
 updated_id=0
-#TODO 3-AUTOFILL - rules not set so cant autofill valid data
 #TODO after deleting buggies, fix counter for id so that buggies will always fill current gaps
 
 #TODO add tooltips onto forms
 #TODO custom 404 page
-
-def fill_form(buggy):
-    #TODO turn into class to fill values for form so variables can be global and independent so anything can use it
-    con = sql.connect(DATABASE_FILE)
-    con.row_factory = sql.Row
-    cur = con.cursor()
-    if buggy == None:
-        cur.execute("SELECT qty_wheels,power_type,power_units,aux_power_type,aux_power_units,hamster_booster,flag_color_primary,flag_pattern,flag_color_secondary,tyres,qty_tyres,armour,attack,qty_attacks,fireproof,insulated,antibiotic,banging,algo FROM buggies ORDER BY id DESC LIMIT 1")
-    else:
-        cur.execute("SELECT qty_wheels,power_type,power_units,aux_power_type,aux_power_units,hamster_booster,flag_color_primary,flag_pattern,flag_color_secondary,tyres,qty_tyres,armour,attack,qty_attacks,fireproof,insulated,antibiotic,banging,algo FROM buggies WHERE id=?",(buggy,))
-    record = cur.fetchone()
-    value_fills = []
-    try:
-        for data in enumerate(record):
-            value_fills.append(data[1])
-    except:
-        value_fills=[]
-    return value_fills
-
 
 
 #------------------------------------------------------------
@@ -54,7 +35,8 @@ def home():
 @main.route('/new', methods = ['POST', 'GET'])
 def create_buggy():
     if request.method == 'GET':
-        value_fills = fill_form(None)
+        buggy_class = fill_form(None)
+        value_fills = buggy_class.random_buggy()
         return render_template("buggy-form.html",value_fills=value_fills)
     elif request.method == 'POST':
         msg=""
@@ -62,18 +44,23 @@ def create_buggy():
         for parameter in ['qty_wheels','power_type','power_units','aux_power_type','aux_power_units','hamster_booster','flag_color_primary','flag_pattern','flag_color_secondary','tyres','qty_tyres','armour','attack','qty_attacks','fireproof','insulated','antibiotic','banging','algo']:
             result = request.form.get(parameter)
             new_buggy.append(result)
-
         result = buggy_validation(new_buggy)
         total = cost_method(new_buggy)
         cost = total.buggy_cost()
         costs = str(cost[0])+' / '+str(cost[1])
         new_buggy.append(costs)
-        new_buggy.append(current_user.id)
+        try:
+            new_buggy.append(current_user.id)
+        except AttributeError:
+            buggy_class = fill_form(new_buggy)
+            value_fills = buggy_class.fill_form()
+            flash('You are not logged in, please login to save a buggy', 'warning')
+            return render_template("buggy-form.html", value_fills=value_fills)
         if result.passback() == 'error':
-            msg="error in update operation"
-            fix_entry=True
-            return render_template("updated.html", msg=msg,fix_entry=fix_entry)
-            #TODO find some way of leaving user data in forms if there is an incomplete buggy submit
+            buggy_class = fill_form(new_buggy)
+            value_fills = buggy_class.fill_form()
+            flash('There is an error in the input of the buggy, please try again', 'warning')
+            return render_template("buggy-form.html", value_fills=value_fills)
         elif result.passback() == 'success':
             try:
                 with sql.connect(DATABASE_FILE) as con:
@@ -112,7 +99,6 @@ def update_buggy():
             #try:
                 with sql.connect(DATABASE_FILE) as con:
                     cur = con.cursor()
-                    print(updated_id)
                     cur.execute("UPDATE buggies SET qty_wheels=?,power_type=?,power_units=?,aux_power_type=?,aux_power_units=?,hamster_booster=?,flag_color_primary=?,flag_pattern=?,flag_color_secondary=?,tyres=?,qty_tyres=?,armour=?,attack=?,qty_attacks=?,fireproof=?,insulated=?,antibiotic=?,banging=?,algo=?,total_cost=? WHERE id=?",([new_buggy[0],new_buggy[1],new_buggy[2],new_buggy[3],new_buggy[4],new_buggy[5],new_buggy[6],new_buggy[7],new_buggy[8],new_buggy[9],new_buggy[10],new_buggy[11],new_buggy[12],new_buggy[13],new_buggy[14],new_buggy[15],new_buggy[16],new_buggy[17],new_buggy[18],new_buggy[19],updated_id]))
                     con.commit()
                     msg = "Record successfully saved"
