@@ -226,3 +226,45 @@ header{
         color:black;
     }
 }
+.user_list{
+    margin-left: auto;
+    margin-right: auto;
+    button{
+        @extend .standard_button_styling;
+        font-size: 1.25em;
+    }
+    button:hover, input[type=submit]:hover{
+        background-color: black;
+        color: white;
+        cursor: pointer;
+        }
+    input[type=submit]{
+        @extend .standard_button_styling;
+        font-size: 1.25em;
+    }
+    table {
+        @extend table;
+        @extend .buggy_list;
+    }
+}
+.spacer_hidden{
+    margin: 3em auto 3em auto;
+    text-align: center;
+    form{
+        input[type=text]{
+            width:250px;
+        }
+        input[type=password]{
+            width:250px;
+        }
+    }
+    button[type=submit] {
+        @extend .standard_button_styling;
+        font-size: 1em;
+    }
+    button:hover{
+        background-color: black;
+        color: white;
+        cursor: pointer;
+    }
+}

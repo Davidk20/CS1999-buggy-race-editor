@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>User Management</h1>
+    <div class="spacer">
+        <table class="user_list">
+            <tr>
+                <td>User_ID</td>
+                <td>Name</td>
+                <td>Username</td>
+                <td>Email</td>
+            </tr>
+            {% for record in users %}
+                <tr>
+                    {% for entry in record %}
+                        <td>{{ entry }}</td>
+                    {% endfor %}
+                    <form action="/manage" method="POST">
+                        <td class="record_navigation"><input type="submit" value="Reset Password" name='{{ record[0] }}'></td>
+                        <td class="record_navigation"><input type="submit" value="Make Admin" name='{{ record[0] }}'></td>
+                        <td class="record_navigation"><input type="submit" value="Delete User" name={{record[0]}}></td>
+                    </form>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

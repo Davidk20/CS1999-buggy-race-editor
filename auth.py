@@ -29,6 +29,11 @@ def login():
             from .user_model import User as userData
             user = userData(user[0],user[1],user[2],user[3],user[4])
             login_user(user)
+            if password == 'Pass1234':
+                print('yeet')
+                flash('Your password has been reset, please change before continuing')
+                return redirect(url_for('main.home'))
+                #TODO change this to personal UAC when created
             return redirect(url_for('main.home'))
 
 @auth.route('/signup', methods=['POST', 'GET'])
@@ -57,7 +62,6 @@ def signup():
                 elif email == accounts[user][4]:
                     flash('Account already exists', 'warning')
                     return render_template('login.html')
-
             password = generate_password_hash(password)
             try:
                 con = sql.connect(DATABASE_FILE)

@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify, flash, url_for, redirect, Blueprint
-from flask_login import login_required,current_user
+from flask_login import login_required,current_user, logout_user
+from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3 as sql
 from form_validation import buggy_validation
 from cost_method import cost_method
@@ -10,10 +11,6 @@ BUGGY_RACE_SERVER_URL = "http://rhul.buggyrace.net"
 value_fills=[]
 new_buggy=[]
 updated_id=0
-#TODO after deleting buggies, fix counter for id so that buggies will always fill current gaps
-
-#TODO add tooltips onto forms
-#TODO custom 404 page
 
 
 #------------------------------------------------------------
@@ -23,9 +20,11 @@ updated_id=0
 def home():
     try:
         name = current_user.name
+        is_admin = current_user.is_admin()
     except AttributeError:
         name = "Guest"
-    return render_template('index.html', server_url=BUGGY_RACE_SERVER_URL, name=name)
+        is_admin = 0
+    return render_template('index.html', server_url=BUGGY_RACE_SERVER_URL, name=name, is_admin=is_admin)
 
 #------------------------------------------------------------
 # creating a new buggy:
@@ -94,7 +93,6 @@ def update_buggy():
             msg="error in update operation - Invalid Buggy configured"
             fix_entry=True
             return render_template("updated.html", msg=msg,fix_entry=fix_entry)
-            #TODO find some way of leaving user data in forms if there is an incomplete buggy submit
         elif result.passback() == 'success':
             #try:
                 with sql.connect(DATABASE_FILE) as con:
@@ -213,7 +211,133 @@ def display_graphic(buggy_id):
     return flag_vars
     #return render_template("graphic.html",flag_vars=flag_vars)
 
+@main.route('/manage',methods = ['POST', 'GET'])
+@login_required
+def manage_users():
+    if request.method == "GET":
+        con = sql.connect(DATABASE_FILE)
+        con.row_factory = sql.Row
+        cur = con.cursor()
+        cur.execute("SELECT id,name,username,email FROM users")
+        result = cur.fetchall();
+        return render_template("manage_users.html", users = result)
+    elif request.method == "POST":
+        command = request.form
+        command_list = []
+        for key, value in command.items():
+            temp = [key, value]
+            command_list.append(temp)
+        con = sql.connect(DATABASE_FILE)
+        con.row_factory = sql.Row
+        cur = con.cursor()
+        cur.execute("SELECT id,name,username,email FROM users")
+        result = cur.fetchall()
+        if command_list[0][1] == 'Reset Password':
+            new_pass = generate_password_hash('Pass1234')
+            cur.execute("UPDATE users SET password=? WHERE id=?",(new_pass,command_list[0][0]))
+            con.commit()
+            flash('Password reset, New password = Pass1234')
+            return render_template("manage_users.html", users = result)
+        elif command_list[0][1] == 'Make Admin':
+            cur.execute("UPDATE users SET is_admin=1 WHERE id=?",(command_list[0][0],))
+            con.commit()
+            flash('User is now admin')
+            return render_template("manage_users.html", users = result)
+        elif command_list[0][1] == 'Delete User':
+            try:
+                cur.execute("DELETE FROM users WHERE id=?", (command_list[0][0],))
+                con.commit()
+                flash('User Deleted')
+            except:
+                con.rollback()
+            finally:
+                cur.execute("SELECT id,name,username,email FROM users")
+                result = cur.fetchall()
+                con.close()
+                return render_template("manage_users.html",users = result)
+
+
+@main.route('/personal',methods = ['POST', 'GET'])
+@login_required
+def manage_account():
+    if request.method == "GET":
+        con = sql.connect(DATABASE_FILE)
+        con.row_factory = sql.Row
+        cur = con.cursor()
+        cur.execute("SELECT id,name,username,email FROM users WHERE id=?",(int(current_user.id),))
+        result = cur.fetchall();
+        return render_template("manage_account.html",users = result)
+    elif request.method == 'POST':
+        con = sql.connect(DATABASE_FILE)
+        con.row_factory = sql.Row
+        cur = con.cursor()
+        cur.execute("SELECT * FROM users WHERE id=?",(int(current_user.id),))
+        result = cur.fetchone();
+        cur.execute("SELECT id,name,username,email FROM users WHERE id=?",(int(current_user.id),))
+        results = cur.fetchall()
+        command = request.form
+        command_list=[]
+        for key, value in command.items():
+            temp = [key, value]
+            command_list.append(temp)
+        if command_list[0][1] == 'Delete Account':
+            try:
+                cur.execute("DELETE FROM users WHERE id=?", (command_list[0][0],))
+                con.commit()
+            except:
+                con.rollback()
+            finally:
+                con.close()
+                logout_user()
+                flash('Account Deleted, you have been logged out.')
+                return render_template("index.html")
+        elif command_list[0][0] == 'name':
+            updates=[]
+            print('yes')
+            for item in range(len(command_list)):
+                if command_list[item][1] != '':
+                    updates.append(command_list[item])
+                else:
+                   updates.append([command_list[item][0],result[item+1]])
+            print(updates)
+            if command_list[3][1] != command_list[4][1]:
+                flash("Error - Password doesn't match")
+                return render_template('manage_account.html',users = results)
+            elif not check_password_hash(result[3],command_list[3][1]):
+                flash("Error - Incorrect Password")
+                return render_template('manage_account.html',users = results)
+            else:
+                cur.execute("SELECT * FROM users")
+                accounts = cur.fetchall()
+                for user in range(len(accounts)):
+                    if command_list[1][1] == accounts[user][2]:
+                        flash('Account name already in use', 'warning')
+                        return render_template('manage_account.html', users=results)
+                    elif command_list[2][1] == accounts[user][4]:
+                        flash('Email Address already in use', 'warning')
+                        return render_template('manage_account.html', users=results)
+                cur.execute("UPDATE users SET name=?,username=?,email=? WHERE id=?",(updates[0][1],updates[1][1],updates[2][1],result[0]))
+                con.commit()
+                cur.execute("SELECT id,name,username,email FROM users WHERE id=?", (int(current_user.id),))
+                result = cur.fetchall()
+                return render_template("manage_account.html", users=result)
+
+
+        elif command_list[0][0] == 'old_password':
+            if not check_password_hash(result[3],command_list[0][1]):
+                flash("Error - Incorrect Password")
+                return render_template('manage_account.html',users = results)
+            elif command_list[1][1] != command_list[2][1]:
+                flash("Error - Password doesn't match")
+                return render_template('manage_account.html',users = results)
+            else:
+                new_password = generate_password_hash(command_list[1][1])
+                cur.execute("UPDATE users SET password=? WHERE id=?",(new_password,result[0]))
+                con.commit()
+                cur.execute("SELECT id,name,username,email FROM users WHERE id=?", (int(current_user.id),))
+                result = cur.fetchall()
+                flash("Password successfully changed")
+                return render_template("manage_account.html", users=result)
+
 if __name__ == '__main__':
     app.run(debug = True, host="0.0.0.0")
-
-#TODO wrap button in a tag to simletaneously trigger and submit the submitted id into varioable so i can use it to choose which flag to render

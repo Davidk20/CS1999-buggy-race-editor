@@ -30,7 +30,7 @@ p {
   margin: 1em 0;
 }
 
-.standard_button_styling, .record_navigation input[type=submit], a.button, input.button {
+.standard_button_styling, .spacer_hidden button[type=submit], .user_list input[type=submit], .user_list button, .record_navigation input[type=submit], a.button, input.button {
   border: 1px solid black;
   padding: 0.5em;
   margin: 0.5em;
@@ -105,13 +105,13 @@ label {
   text-align: center;
 }
 
-table {
+table, .user_list table {
   border: 1px solid black;
   border-collapse: collapse;
   margin: 0 0 2em 0;
 }
 
-table td, table th {
+table td, .user_list table td, table th, .user_list table th {
   padding: 0.25em;
   border: 1px solid #999;
   padding: 0.5rem;
@@ -130,7 +130,7 @@ table td, table th {
   text-align: center;
 }
 
-.buggy_list {
+.buggy_list, .user_list table {
   text-align: center;
   font-size: 0.7em;
 }
@@ -225,6 +225,40 @@ header a {
 }
 header a:visited {
   color: black;
+}
+
+.user_list {
+  margin-left: auto;
+  margin-right: auto;
+}
+.user_list button {
+  font-size: 1.25em;
+}
+.user_list button:hover, .user_list input[type=submit]:hover {
+  background-color: black;
+  color: white;
+  cursor: pointer;
+}
+.user_list input[type=submit] {
+  font-size: 1.25em;
+}
+.spacer_hidden {
+  margin: 3em auto 3em auto;
+  text-align: center;
+}
+.spacer_hidden form input[type=text] {
+  width: 250px;
+}
+.spacer_hidden form input[type=password] {
+  width: 250px;
+}
+.spacer_hidden button[type=submit] {
+  font-size: 1em;
+}
+.spacer_hidden button:hover {
+  background-color: black;
+  color: white;
+  cursor: pointer;
 }
 
 /*# sourceMappingURL=stylesheet.css.map */

@@ -11,6 +11,12 @@
         <a href="/buggy" class="button">Show/Manage buggy</a>
         <br>
         <a href="/json" class="button">Get buggy JSON</a>
+        <a href="/personal" class="button">Manage Account</a>
+        <br>
+        {% if is_admin == 1 %}
+            <a href="/manage" class="button">Manage Users</a>
+        {% endif %}
+
         <p>
             Use this editor to specify a racing buggy. The editor saves it in its
             little database and generates JSON data for the buggy. This is the data you

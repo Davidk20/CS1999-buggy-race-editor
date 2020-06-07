@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <script>
+        function showForm(id) {
+            var x = document.getElementById(id);
+            if (id == 'update_form') {
+                var y = document.getElementById('password_form')
+            }
+            else{
+                var y = document.getElementById('update_form')
+            }
+            if (x.style.display == "none") {
+                x.style.display = "block";
+            }
+            else {
+               x.style.display = "none";
+            }
+            y.style.display = "none"
+        }
+    </script>
+    <h1>Account Management</h1>
+    <div class="spacer">
+        <table class="user_list">
+            <tr>
+                <td>User_ID</td>
+                <td>Name</td>
+                <td>Username</td>
+                <td>Email</td>
+            </tr>
+            {% for record in users %}
+                <tr>
+                    {% for entry in record %}
+                        <td>{{ entry }}</td>
+                    {% endfor %}
+                        <td class="record_navigation"><button onclick="showForm('update_form')">Update Account</button></td>
+                        <td class="record_navigation"><button onclick="showForm('password_form')">Change Password</button></td>
+                    <form action="/personal" method="POST">
+                        <td class="record_navigation"><input type="submit" value="Delete Account" name={{record[0]}}></td>
+                    </form>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="spacer_hidden" id="update_form" style="display: none">
+        <form action="/personal" method="POST">
+            <label for="name">Name:</label>
+            <input type="text" name="name">
+            <br>
+            <label for="username">Username:</label>
+            <input type="text" name="username">
+            <br>
+            <label for="email">Email:</label>
+            <input type="text" name="email">
+            <br>
+            <label for="password">Password:</label>
+            <input type="password" name="password" required>
+            <br>
+            <label for="confirm_password">Confirm Password:</label>
+            <input type="password" name="confirm_password" required>
+            <br>
+            <button type="submit">Update</button>
+        </form>
+    </div>
+    <div class="spacer_hidden" id="password_form" style="display: none">
+        <form action="/personal" method="POST">
+            <label for="old_password">Current Password</label>
+            <input type="password" name="old_password" required>
+            <br>
+            <label for="new_password">New Password:</label>
+            <input type="password" name="new_password" required>
+            <br>
+            <label for="confirm_password">Confirm Password:</label>
+            <input type="password" name="confirm_password" required>
+            <br>
+            <button type="submit">Update</button>
+        </form>
+    </div>
+
+{% endblock %}
