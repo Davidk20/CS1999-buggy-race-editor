@@ -81,7 +81,7 @@
             <label for="flag_pattern">Flag's pattern:</label>
             <select name="flag_pattern" class="select_form">
                 {% for i in [['plain','Plain'],['vstripe','Vertical Stripes'],['hstripe','Horizontal Stripes'],['dstripe','Diagonal Stripes'],['checker','Checkered'],['spot','Spots'],] %}
-                    {% if value_fills[8] == i[0] %}
+                    {% if value_fills[7] == i[0] %}
                         <option selected="selected" value={{i[0]}}>{{i[1]}}</option>
                     {% else %}
                         <option value={{i[0]}}>{{i[1]}}</option>

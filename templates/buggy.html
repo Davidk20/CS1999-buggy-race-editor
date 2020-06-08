@@ -5,49 +5,143 @@
     <h1>List of Buggies</h1>
     <table class="buggy_list">
         <tr>
-            <td>ID</td>
-            <td>Number of Wheels</td>
-            <td>Primary Motive Power</td>
-            <td>Power Units</td>
-            <td>Auxillary Motive Power</td>
-            <td>Auxillary Power Units</td>
-            <td>Hamster Booster</td>
-            <td colspan="2">Flag Primary Colour</td>
-            <td colspan="2">Flag Secondary Colour</td>
-            <td>Flag Pattern</td>
-            <td>Type of Tyre</td>
-            <td>Number of Tyres</td>
-            <td>Armour</td>
-            <td>Offencive Capability</td>
-            <td>Number of Attacks</td>
-            <td>Fireproof?</td>
-            <td>Insulated?</td>
-            <td>Antibiotic</td>
-            <td>Banging Sound System</td>
-            <td>Race Computer Algorithm</td>
-            <td>Total Buggy Cost (unit/kg)</td>
+            <th>ID</th>
+            <th>Number of Wheels</th>
+            <th>Primary Motive Power</th>
+            <th>Power Units</th>
+            <th>Auxillary Motive Power</th>
+            <th>Auxillary Power Units</th>
+            <th>Hamster Booster</th>
+            <th>Flag</th>
+            <th>Type of Tyre</th>
+            <th>Number of Tyres</th>
+            <th>Armour</th>
+            <th>Offencive Capability</th>
+            <th>Number of Attacks</th>
+            <th>Fireproof?</th>
+            <th>Insulated?</th>
+            <th>Antibiotic</th>
+            <th>Banging Sound System</th>
+            <th>Race Computer Algorithm</th>
+            <th>Total Buggy Cost (unit/kg)</th>
         </tr>
         {% for record in buggy %}
             <tr>
                 {% for entry in record %}
-                    {% if entry == record[7] or entry==record[8] %}
-                        <td style="background-color: {{ entry }}"></td>
-                        <td>{{ entry }}</td>
-                    {% elif entry == record[9] %}
+                    {% if entry == record[7]%}
                         <td>
-                            {{ entry }}
-                            <form action="/buggy" method="post">
-                                <input type="submit" class="buggy_graphic_button" value="graphic" name='{{ record[0] }}'>
-                            </form>
-                            <!-- <a href="/graphic" onClick="MyWindow=window.open('/graphic','MyWindow','width=500,height=500'); return false;">View</a> -->
+                            <div class="graphic_window">
+                                    <canvas id="{{ record[0] }}" width="98" height="98">
+                                        <canvas id="{{record[20]}}" width="24.5" height="24.5"></canvas>
+                                    </canvas>
+                                    {% if record[9]=='plain' %}
+                                        <script>
+                                            var c = document.getElementById("{{ record[0] }}");
+                                            var ctx = c.getContext("2d");
+                                            ctx.beginPath();
+                                            ctx.fillStyle = "{{record[7]}}"
+                                            ctx.rect(0, 0, 98, 98);
+                                            ctx.fill();
+                                        </script>
+                                    {% elif record[9]=='vstripe' %}
+                                        <script>
+                                            var c = document.getElementById("{{ record[0] }}");
+                                            var ctx = c.getContext("2d");
+                                            ctx.beginPath()
+                                            ctx.rect(0, 0, 19.6, 98);
+                                            ctx.rect(39.2, 0, 19.6, 98);
+                                            ctx.rect(78.4, 0, 19.6, 98);
+                                            ctx.fillStyle = "{{record[7]}}";
+                                            ctx.fill();
+                                            ctx.beginPath()
+                                            ctx.rect(19.6, 0, 19.6, 98);
+                                            ctx.rect(58.8, 0, 19.6, 98);
+                                            ctx.fillStyle = "{{record[8]}}";
+                                            ctx.fill();
+                                        </script>
+                                    {% elif record[9] == 'hstripe' %}
+                                        <script>
+                                            var c = document.getElementById("{{ record[0] }}");
+                                            var ctx = c.getContext("2d");
+                                            ctx.beginPath()
+                                            ctx.rect(0, 0, 98, 19.6);
+                                            ctx.rect(0, 39.2, 98, 19.6);
+                                            ctx.rect(0, 78.4, 98, 19.6);
+                                            ctx.fillStyle = "{{record[7]}}";
+                                            ctx.fill();
+                                            ctx.beginPath()
+                                            ctx.rect(0, 19.6, 98, 19.6);
+                                            ctx.rect(0, 58.8, 98, 19.6);
+                                            ctx.fillStyle = "{{record[8]}}";
+                                            ctx.fill();
+                                        </script>
+                                    {% elif record[9] == 'dstripe' %}
+                                        <script>
+                                            var c = document.getElementById("{{ record[0] }}");
+                                            var ctx = c.getContext("2d");
+                                            var color1 = "{{record[7]}}",color2="{{record[8]}}";
+                                            var numberOfStripes = 5;
+                                            for (var i=0;i<numberOfStripes*2;i++) {
+                                                var thickness = 98 / numberOfStripes;
+                                                ctx.beginPath();
+                                                ctx.strokeStyle = i % 2 ? color1 : color2;
+                                                ctx.lineWidth = thickness;
+                                                ctx.lineCap = 'square';
+                                                ctx.moveTo(i * thickness + thickness / 2 - 98, 0);
+                                                ctx.lineTo(0 + i * thickness + thickness / 2, 98);
+                                                ctx.stroke();
+                                            }
+                                        </script>
+                                    {% elif record[9] == 'checker' %}
+                                        <script>
+                                            var c = document.getElementById("{{ record[0] }}");
+                                            var ctx = c.getContext("2d");
+                                                ctx.beginPath();
+                                                ctx.rect(0,0,49,49);
+                                                ctx.rect(49,49,49,49);
+                                                ctx.fillStyle = '{{ record[7] }}';
+                                                ctx.fill();
+                                                ctx.beginPath();
+                                                ctx.rect(49,0,49,49);
+                                                ctx.rect(0,49,49,49);
+                                                ctx.fillStyle = '{{ record[8] }}';
+                                                ctx.fill();
+                                        </script>
+                                    {% elif record[9] == 'spot'%}
+                                        <script>
+                                            var canvas = document.getElementById("{{record[0]}}")
+                                            var context = canvas.getContext("2d");
+                                            var canvasPattern = document.getElementById("{{ record[20] }}");
+                                            var contextPattern = canvasPattern.getContext("2d");
+                                                contextPattern.beginPath();
+                                                contextPattern.rect(0,0,24.5,24.5);
+                                                contextPattern.fillStyle = '{{ record[7] }}';
+                                                contextPattern.fill();
+                                                contextPattern.beginPath();
+                                                contextPattern.arc(10, 10, 6, 0, 2 * Math.PI);
+                                                contextPattern.fillStyle = '{{ record[8] }}';
+                                                contextPattern.fill();
+                                            var pattern = context.createPattern(canvasPattern,"repeat");
+                                            context.fillStyle = pattern;
+                                            context.fillRect(0, 0, 98, 98);
+                                            context.fill();
+                                        </script>
+                                    {% endif %}
+                            </div>
                         </td>
+                    {% elif entry == record[8] or entry == record[9] %}
+                        {{ continue }}
+
                     {% else %}
                         <td>{{ entry }}</td>
                     {% endif %}
                 {% endfor %}
                 <form action="/buggy" method="post">
-                    <td class="record_navigation"><input type="submit" value="Modify" name='{{ record[0] }}'></td>
-                    <td class="record_navigation"><input type="submit" value="Delete" name={{record[0]}}></td>
+                    <td class="record_navigation">
+                        <input type="submit" value="Modify" name='{{ record[0] }}'>
+                        <input type="submit" value="Delete" name={{record[0]}}>
+                        <input type="submit" value="JSON" name={{record[0]}}>
+                    </td>
                 </form>
             </tr>
         {% endfor %}

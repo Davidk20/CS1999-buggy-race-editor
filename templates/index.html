@@ -2,32 +2,26 @@
 
 {% block content %}
 
-    <h1 class="title">My Buggy Editor</h1>
-    <h2>Welcome {{ name }}</h2>
-
-    <img src="static/buggy_1.png" width="300" height="205">
-    <div class="spacer">
+    <h1 class="title" id="index">Buggy Editor</h1>
+    <h2 class="welcome">Welcome {{ name }}</h2>
+    <div class="spacer_right">
+    <img src="static/buggy_2.png" width="450" height="307">
+    </div>
+    <div class="spacer_left">
         <a href="/new" class="button">Make buggy</a>
+        <br>
         <a href="/buggy" class="button">Show/Manage buggy</a>
         <br>
-        <a href="/json" class="button">Get buggy JSON</a>
-        <a href="/personal" class="button">Manage Account</a>
+        <a href="{{ server_url }}" class="button">Race Server</a>
+        <br>
+        <a href="/poster" class="button">Project Poster</a>
+        <br>
+        {% if current_user.is_authenticated %}
+            <a href="/personal" class="button">Manage Account</a>
+        {% endif %}
         <br>
         {% if is_admin == 1 %}
             <a href="/manage" class="button">Manage Users</a>
         {% endif %}
-
-        <p>
-            Use this editor to specify a racing buggy. The editor saves it in its
-            little database and generates JSON data for the buggy. This is the data you
-            need to supply when you log into the
-            <strong><a href="{{ server_url }}">race server</a></strong> and enter your
-            buggy into the next race.
-        </p>
-        <p>
-            Remember that if your data is not accepted by the race server, your buggy
-            will be disqualified from that race... so make sure you program your editor
-            correctly.
-        </p>
     </div>
 {% endblock %}

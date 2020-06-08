@@ -1,36 +1,75 @@
 html {
   margin: 0;
   padding: 0;
-  background: #eaeaea;
+  background: black;
   min-height: 100vh;
   font-family: "Source Sans Pro", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  color: white;
+  font-size: 1.2em;
+  user-select: none;
 }
 
 body {
   margin-left: auto;
   margin-right: auto;
-  padding: 0;
-  font-size: 1.2em;
-  color: #000000;
+}
+
+a {
+  text-decoration: none;
+}
+
+header {
+  background-color: #d72323;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  text-align: right;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  margin-bottom: 2em;
+}
+header h3 {
+  display: inline-block;
+  position: absolute;
+  left: 1em;
+  top: -0.7em;
+  color: white;
+}
+header a {
+  display: inline-block;
+  padding-right: 1em;
+  float: right;
+  color: white;
+}
+header a:visited {
+  color: white;
 }
 
 .main-content {
-  padding: 1em;
+  padding-top: 3em;
 }
 
 h1 {
   text-align: center;
+}
+h1 #title {
+  display: block;
+  margin-top: 1em;
 }
 
 h2 {
   text-align: center;
 }
 
+h2.welcome {
+  color: #fff100;
+}
+
 p {
   margin: 1em 0;
 }
 
-.standard_button_styling, .spacer_hidden button[type=submit], .user_list input[type=submit], .user_list button, .record_navigation input[type=submit], a.button, input.button {
+.standard_button_styling, .spacer_hidden button[type=submit], .user_list button, .record_navigation input[type=submit], a.button, input.button {
   border: 1px solid black;
   padding: 0.5em;
   margin: 0.5em;
@@ -41,9 +80,9 @@ p {
   box-shadow: 5px 5px 5px #999999;
 }
 
-a.button:hover, input.button:hover {
-  background-color: black;
-  color: white;
+.standard_button_styling:hover, .spacer_hidden button[type=submit]:hover, .user_list button:hover, .record_navigation input[type=submit]:hover, a.button:hover, input.button:hover {
+  background-color: #fff100;
+  color: black;
   cursor: pointer;
 }
 
@@ -55,24 +94,25 @@ input {
 
 select {
   font-size: 1.1em;
-  width: 400px;
+  width: 375px;
   margin-bottom: 1em;
+  height: 50px;
 }
 
 input[type=color] {
-  width: 375px;
+  width: 350px;
 }
 
 input[type=text] {
-  width: 375px;
+  width: 350px;
 }
 
 input[type=number] {
-  width: 375px;
+  width: 350px;
 }
 
 input.button {
-  background-color: #99ff99;
+  background-color: #fff100;
   margin-left: 46.5%;
   display: inline-block;
   width: 100px;
@@ -91,6 +131,25 @@ div.buggy_form {
   margin-right: auto;
   margin-left: auto;
   text-align: left;
+  padding-top: 1em;
+}
+.new_buggy_form input.button {
+  float: right !important;
+  margin-left: 3.5em;
+  margin-right: 0;
+  text-align: center;
+  width: 375px !important;
+  margin-top: 0 !important;
+  box-shadow: none;
+  border: white 2px solid;
+  color: white;
+  background-color: black;
+}
+.new_buggy_form input.button:hover {
+  background-color: #fff100;
+  color: black;
+  border: black 2px solid;
+  cursor: pointer;
 }
 
 label {
@@ -114,12 +173,11 @@ table, .user_list table {
 table td, .user_list table td, table th, .user_list table th {
   padding: 0.25em;
   border: 1px solid #999;
-  padding: 0.5rem;
 }
 
 .spacer {
   display: block;
-  margin: 3em auto 3em auto;
+  margin: 1em auto 3em auto;
   text-align: center;
 }
 
@@ -132,7 +190,8 @@ table td, .user_list table td, table th, .user_list table th {
 
 .buggy_list, .user_list table {
   text-align: center;
-  font-size: 0.7em;
+  font-size: 0.8em;
+  margin-left: 2em;
 }
 
 .record_navigation {
@@ -141,51 +200,75 @@ table td, .user_list table td, table th, .user_list table th {
   border-bottom-style: hidden;
   font-size: 0.8em;
 }
+.record_navigation input[type=submit] {
+  border: white 1px solid;
+  color: white;
+  background-color: black;
+  box-shadow: none;
+}
+.record_navigation input[type=submit]:hover {
+  background-color: #fff100;
+  color: black;
+  border: black 1px solid !important;
+  cursor: pointer;
+}
+
 .buggy_graphic_button {
   font-size: 1em;
 }
 
 img {
   display: block;
-  margin-right: auto;
-  margin-left: auto;
+  margin: 0em auto 0;
 }
 
 .spacer_left {
   display: inline-block;
   float: left;
-  width: 50%;
+  width: 30%;
+  padding-top: 3em;
+  text-align: right;
+  padding-left: 15em;
+}
+.spacer_left a {
+  display: inline-block;
 }
 
 .spacer_right {
+  padding-top: 0;
   display: inline-block;
   float: right;
-  width: 50%;
+  width: 30%;
+  padding-right: 20em;
 }
 
-.account_form_container {
-  text-align: center;
+.account_form_container label {
+  width: 250px;
 }
 .account_form_container input[type=text] {
   width: 250px;
+  margin-right: 2em;
 }
 .account_form_container input[type=password] {
   width: 250px;
+  margin-right: 2em;
 }
 .account_form_container button {
-  background-color: #99ff99;
+  border: 1px solid black;
+  padding: 0.5em;
+  border-radius: 0.25em;
+  text-decoration: none;
+  background-color: white;
+  color: black;
+  box-shadow: 5px 5px 5px #999999;
   display: block;
-  width: 100px;
+  width: 120px;
   text-align: center;
   font-size: 1.25em;
-  border: solid black;
-  border-radius: 4px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0.5em auto;
 }
 .account_form_container button:hover {
-  background-color: black;
-  color: white;
+  background-color: #fff100;
   cursor: pointer;
 }
 
@@ -193,15 +276,16 @@ img {
   margin-right: 17%;
   margin-left: auto;
   display: inline-block;
-  padding: 2px;
   text-align: center;
 }
 .flash_alert_container .flash_alert {
+  border: 1px white solid;
   min-width: 600px;
   background-color: rgba(255, 0, 0, 0.6);
   display: inline-block;
   float: left;
   text-align: center;
+  min-height: 100%;
 }
 .flash_alert_container .flash_close {
   display: inline-block;
@@ -210,36 +294,28 @@ img {
   cursor: pointer;
 }
 
-header {
-  background-color: #ffe66f;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  text-align: right;
-  padding-top: 0.5em;
-  padding-bottom: 0.5em;
-}
-header a {
-  text-decoration: none;
-  padding-right: 1em;
-}
-header a:visited {
-  color: black;
-}
-
 .user_list {
   margin-left: auto;
   margin-right: auto;
 }
 .user_list button {
+  box-shadow: none;
+  border: white 2px solid;
+  color: white;
+  background-color: black;
   font-size: 1.25em;
 }
 .user_list button:hover, .user_list input[type=submit]:hover {
-  background-color: black;
-  color: white;
+  background-color: #fff100;
+  color: black;
+  border: black 2px solid;
   cursor: pointer;
 }
 .user_list input[type=submit] {
+  box-shadow: none;
+  border: white 2px solid;
+  color: white;
+  background-color: black;
   font-size: 1.25em;
 }
 .spacer_hidden {
@@ -253,12 +329,39 @@ header a:visited {
   width: 250px;
 }
 .spacer_hidden button[type=submit] {
-  font-size: 1em;
+  box-shadow: none;
+  border: white 2px solid;
+  color: white;
+  background-color: black;
+  font-size: 1.25em;
 }
 .spacer_hidden button:hover {
-  background-color: black;
-  color: white;
+  background-color: #fff100;
+  color: black;
+  border: black 2px solid;
   cursor: pointer;
+}
+
+.cs1999-tasks {
+  border-top: 1px solid black;
+  margin-top: 4em;
+}
+
+.cs1999-tasks .task {
+  margin: 1em;
+  padding: 1em;
+  border: 1px solid black;
+}
+
+.cs1999-tasks .task h2 {
+  border-bottom: 3px solid gray;
+}
+
+.graphic_window {
+  background-color: white;
+  border: 1px white solid;
+  max-height: 98px;
+  max-width: 98px;
 }
 
 /*# sourceMappingURL=stylesheet.css.map */

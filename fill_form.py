@@ -25,7 +25,6 @@ class fill_form():
 
 
     def fill_form(self):
-        print('yes')
         if type(self.buggy) is list:
             return self.buggy
         elif self.buggy == None:

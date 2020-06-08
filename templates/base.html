@@ -14,6 +14,7 @@
         </script>
     </head>
     <header>
+        <div><h3>Race Buggy Editor</h3></div>
         <div class="header_banner">
             <div class="flash_alert_container">
                 {% with messages = get_flashed_messages() %}
@@ -27,15 +28,14 @@
                     {% endif %}
                 {% endwith %}
             </div>
-            <a href="{{ url_for('main.home') }}" class="header_link">Home</a>
             {% if not current_user.is_authenticated %}
-                <a href="{{ url_for('auth.login') }}" class="header_link">Login</a>
-                <a href="{{ url_for('auth.signup') }}" class="header_link">Signup</a>
+                <a href="{{ url_for('auth.login') }}" class="header_link"><strong>Login</strong></a>
+                <a href="{{ url_for('auth.signup') }}" class="header_link"><strong>Signup</strong></a>
             {% endif %}
             {% if current_user.is_authenticated %}
-                <a href="{{ url_for('auth.logout') }}" class="header_link">Logout</a>
+                <a href="{{ url_for('auth.logout') }}" class="header_link"><strong>Logout</strong></a>
             {% endif %}
-
+            <a href="{{ url_for('main.home') }}" class="header_link"><strong>Home</strong></a>
         </div>
     </header>
     <body>

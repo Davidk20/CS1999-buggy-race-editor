@@ -27,9 +27,7 @@ def home():
     return render_template('index.html', server_url=BUGGY_RACE_SERVER_URL, name=name, is_admin=is_admin)
 
 #------------------------------------------------------------
-# creating a new buggy:
-#  if it's a POST request process the submitted data
-#  but if it's a GET request, just show the form
+# new buggy form
 #------------------------------------------------------------
 @main.route('/new', methods = ['POST', 'GET'])
 def create_buggy():
@@ -78,6 +76,8 @@ def create_buggy():
 
 @main.route('/update', methods = ['POST', 'GET'])
 def update_buggy():
+    if request.method == 'GET':
+        return render_template("buggy-form.html")
     if request.method == 'POST':
         msg=""
         new_buggy=[]
@@ -108,10 +108,8 @@ def update_buggy():
                 return render_template("updated.html", msg = msg, fix_entry=False, deleted=True)
 
 #------------------------------------------------------------
-# a page for displaying the buggy
+# table of all buggies
 #------------------------------------------------------------
-
-
 @main.route('/buggy', methods = ['POST', 'GET'])
 @login_required
 def show_buggies():
@@ -121,7 +119,10 @@ def show_buggies():
         cur = con.cursor()
         cur.execute("SELECT id,qty_wheels,power_type,power_units,aux_power_type,aux_power_units,hamster_booster,flag_color_primary,flag_color_secondary,flag_pattern,tyres,qty_tyres,armour,attack,qty_attacks,fireproof,insulated,antibiotic,banging,algo,total_cost FROM buggies WHERE user_id=?",(current_user.id,))
         record = cur.fetchall()
-        return render_template("buggy.html", buggy = record)
+        flag_vars = [record[0][8], record[0][7], record[0][9]]
+        flag_vars = [flag_vars[1], flag_vars[0], flag_vars[2]]
+        print(flag_vars)
+        return render_template("buggy.html", buggy = record, flag_vars=flag_vars)
     elif request.method == 'POST':
         command = request.form
         command_list=[]
@@ -129,59 +130,30 @@ def show_buggies():
             temp = [key, value]
             command_list.append(temp)
         if command_list[0][1] == 'Modify':
-            buggy = fill_form(command_list[0][0])
-            global updated_id
-            updated_id=command_list[0][0]
-            return render_template("buggy_update.html", value_fills=buggy)
+            buggy_class = fill_form(int(command_list[0][0]))
+            value_fills = buggy_class.fill_form()
+            return render_template("buggy_update.html", value_fills=value_fills)
         elif command_list[0][1] == 'Delete':
             msg = delete_buggy(command_list[0][0])
             return render_template("updated.html", msg=msg, deleted=True)
-        elif command_list[0][1] == 'graphic':
-            flag_vars=display_graphic(command_list[0][0])
-            return render_template("graphic.html", flag_vars=flag_vars)
-#TODO create custom div for user to view flags using template patterns and pass colours through from list into the styles
-
-#------------------------------------------------------------
-# a page for displaying the buggy form
-#------------------------------------------------------------
-
-
-
-
-
-#------------------------------------------------------------
-# get JSON from current record
-#   this is still probably right, but we won't be
-#   using it because we'll be dipping diectly into the
-#   database
-#------------------------------------------------------------
+        elif command_list[0][1] == 'JSON':
+            con = sql.connect(DATABASE_FILE)
+            con.row_factory = sql.Row
+            cur = con.cursor()
+            cur.execute(
+                "SELECT qty_wheels,power_type,power_units,aux_power_type,aux_power_units,hamster_booster,flag_color_primary,flag_pattern,flag_color_secondary,tyres,qty_tyres,armour,attack,qty_attacks,fireproof,insulated,antibiotic,banging,algo FROM buggies WHERE user_id=? and id=?",
+                (current_user.id, command_list[0][0]))
+            return jsonify(
+                {k: v for k, v in dict(zip(
+                    [column[0] for column in cur.description], cur.fetchone())).items()
+                 if (v != "" and v is not None)
+                 }
+            )
 
 
-@main.route('/json')
-@login_required
-def summary():
-    con = sql.connect(DATABASE_FILE)
-    con.row_factory = sql.Row
-    cur = con.cursor()
-    cur.execute("SELECT qty_wheels,power_type,power_units,aux_power_type,aux_power_units,hamster_booster,flag_color_primary,flag_pattern,flag_color_secondary,tyres,qty_tyres,armour,attack,qty_attacks,fireproof,insulated,antibiotic,banging,algo FROM buggies WHERE user_id=? ORDER BY id DESC LIMIT 1",(current_user.id,))
-    try:
-        return jsonify(
-            {k: v for k, v in dict(zip(
-              [column[0] for column in cur.description], cur.fetchone())).items()
-              if (v != "" and v is not None)
-            }
-          )
-    except TypeError:
-        flash('No records found, please create a buggy before requesting JSON')
-        return render_template('index.html')
 #------------------------------------------------------------
 # delete the buggy
-#   don't want DELETE here, because we're anticipating
-#   there always being a record to update (because the
-#   student needs to change that!)
 #------------------------------------------------------------
-
-
 @main.route('/delete')
 def delete_buggy(buggy_id):
     try:
@@ -199,7 +171,9 @@ def delete_buggy(buggy_id):
         return msg
 
 
-@main.route('/graphic')
+#------------------------------------------------------------
+# display flag graphic
+#------------------------------------------------------------
 def display_graphic(buggy_id):
     con = sql.connect(DATABASE_FILE)
     con.row_factory = sql.Row
@@ -211,6 +185,10 @@ def display_graphic(buggy_id):
     return flag_vars
     #return render_template("graphic.html",flag_vars=flag_vars)
 
+
+#------------------------------------------------------------
+# admin page for managing users
+#------------------------------------------------------------
 @main.route('/manage',methods = ['POST', 'GET'])
 @login_required
 def manage_users():
@@ -257,6 +235,9 @@ def manage_users():
                 return render_template("manage_users.html",users = result)
 
 
+#------------------------------------------------------------
+# personal user management page
+#------------------------------------------------------------
 @main.route('/personal',methods = ['POST', 'GET'])
 @login_required
 def manage_account():
@@ -322,7 +303,6 @@ def manage_account():
                 result = cur.fetchall()
                 return render_template("manage_account.html", users=result)
 
-
         elif command_list[0][0] == 'old_password':
             if not check_password_hash(result[3],command_list[0][1]):
                 flash("Error - Incorrect Password")
@@ -338,6 +318,14 @@ def manage_account():
                 result = cur.fetchall()
                 flash("Password successfully changed")
                 return render_template("manage_account.html", users=result)
+
+
+#------------------------------------------------------------
+# poster page
+#------------------------------------------------------------
+@main.route('/poster')
+def poster():
+   return render_template('poster.html')
 
 if __name__ == '__main__':
     app.run(debug = True, host="0.0.0.0")
