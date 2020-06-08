@@ -77,7 +77,6 @@ p {
     text-decoration: none;
     background-color: white;
     color: black;
-    box-shadow: 5px 5px 5px #999999;
 }
 .standard_button_styling:hover{
     background-color: #fff100;
@@ -140,7 +139,6 @@ div.buggy_form {
         text-align: center;
         width:375px !important;
         margin-top: 0 !important;
-        box-shadow: none;
         border: white 2px solid;
         color: white;
         background-color: black;
@@ -206,7 +204,7 @@ table td, table th {
         border: white 1px solid;
         color: white;
         background-color: black;
-        box-shadow: none ;
+
   }
     input[type=submit]:hover{
         background-color: #fff100;
@@ -227,7 +225,7 @@ img{
     display: inline-block;
     float: left;
     width:30%;
-    padding-top: 3em;
+    padding-top: 2em;
     text-align: right;
     padding-left: 15em;
     a{
@@ -235,7 +233,7 @@ img{
     }
 }
 .spacer_right{
-    padding-top: 0;
+    padding-top: 0.5em;
     display: inline-block;
     float: right;
     width:30%;
@@ -261,7 +259,6 @@ img{
             text-decoration: none;
             background-color: white;
             color: black;
-            box-shadow: 5px 5px 5px #999999;
             display:block;
             width: 120px;
             text-align: center;
@@ -281,11 +278,12 @@ img{
     .flash_alert{
         border: 1px white solid;
         min-width:600px;
-        background-color:rgba(255, 0, 0, 0.6);
+        background-color:#fff100;
         display: inline-block;
         float: left;
         text-align: center;
         min-height:100%;
+        color: black;
     }
     .flash_close{
         display: inline-block;
@@ -300,7 +298,6 @@ img{
     margin-right: auto;
     button{
         @extend .standard_button_styling;
-        box-shadow: none;
         border: white 2px solid;
         color: white;
         background-color: black;
@@ -313,7 +310,6 @@ img{
         cursor: pointer;
     }
     input[type=submit]{
-        box-shadow: none;
         border: white 2px solid;
         color: white;
         background-color: black;
@@ -337,7 +333,6 @@ img{
     }
     button[type=submit] {
         @extend .standard_button_styling;
-        box-shadow: none;
         border: white 2px solid;
         color: white;
         background-color: black;
