@@ -327,5 +327,14 @@ def manage_account():
 def poster():
    return render_template('poster.html')
 
+
+#------------------------------------------------------------
+# Race Results
+#------------------------------------------------------------
+@main.route('/results')
+def results():
+   return render_template('results.html')
+
+
 if __name__ == '__main__':
     app.run(debug = True, host="0.0.0.0")

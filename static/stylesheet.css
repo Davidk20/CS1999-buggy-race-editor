@@ -275,7 +275,6 @@ img {
   text-align: center;
 }
 .flash_alert_container .flash_alert {
-  border: 1px white solid;
   min-width: 600px;
   background-color: #fff100;
   display: inline-block;
@@ -356,6 +355,16 @@ img {
   border: 1px white solid;
   max-height: 98px;
   max-width: 98px;
+}
+
+.race_log {
+  margin-left: auto;
+  margin-right: auto;
+}
+.race_log th {
+  padding: 1.5em;
+  background-color: #fff100;
+  color: black;
 }
 
 /*# sourceMappingURL=stylesheet.css.map */
