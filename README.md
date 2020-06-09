@@ -127,9 +127,9 @@ fix any issues and restore the database to its initial state. This uses the
 *buggy_costs.csv* file to configure so it is important to ensure this is not
 deleted.
 
-Once this is complete, run the first test file to ensure successful integration
-with the database
-    
+Once this is complete, run the two tests to ensure installation was successful
+
+    test_form_validation.py
     test_cost_method.py
     
 The documentation on testing can be found [here.](https://github.com/Davidk20/CS1999-buggy-race-editor/blob/master/TESTING.md)  
@@ -161,11 +161,6 @@ Now you can run the application:
 The webserver is running on port 5000 (the default for Flask apps).
 
 Go to [http://localhost:5000](http://localhost:5000) in your web browser.
-
-Now that the server has initialised correctly for the first time, run the
-second test:
-    
-    test_form_validation.py
 
 #### Development Mode
 
