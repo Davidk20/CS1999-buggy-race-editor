@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, jsonify, flash, Blueprint, redirect, url_for
-from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, login_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3 as sql

@@ -119,10 +119,7 @@ def show_buggies():
         cur = con.cursor()
         cur.execute("SELECT id,qty_wheels,power_type,power_units,aux_power_type,aux_power_units,hamster_booster,flag_color_primary,flag_color_secondary,flag_pattern,tyres,qty_tyres,armour,attack,qty_attacks,fireproof,insulated,antibiotic,banging,algo,total_cost FROM buggies WHERE user_id=?",(current_user.id,))
         record = cur.fetchall()
-        flag_vars = [record[0][8], record[0][7], record[0][9]]
-        flag_vars = [flag_vars[1], flag_vars[0], flag_vars[2]]
-        print(flag_vars)
-        return render_template("buggy.html", buggy = record, flag_vars=flag_vars)
+        return render_template("buggy.html", buggy = record)
     elif request.method == 'POST':
         command = request.form
         command_list=[]
