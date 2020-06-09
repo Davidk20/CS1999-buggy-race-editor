@@ -12,7 +12,6 @@ value_fills=[]
 new_buggy=[]
 updated_id=0
 
-#TODO revoke admin privileges
 
 #------------------------------------------------------------
 # the index page

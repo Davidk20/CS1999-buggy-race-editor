@@ -32,7 +32,6 @@ def login():
                 print('yeet')
                 flash('Your password has been reset, please change before continuing')
                 return redirect(url_for('main.home'))
-                #TODO change this to personal UAC when created
             return redirect(url_for('main.home'))
 
 @auth.route('/signup', methods=['POST', 'GET'])
