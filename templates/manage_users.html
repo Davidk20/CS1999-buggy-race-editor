@@ -18,7 +18,10 @@
                     <form action="/manage" method="POST">
                         <td class="record_navigation"><input type="submit" value="Reset Password" name='{{ record[0] }}'></td>
                         <td class="record_navigation"><input type="submit" value="Make Admin" name='{{ record[0] }}'></td>
-                        <td class="record_navigation"><input type="submit" value="Delete User" name={{record[0]}}></td>
+                        {% if record[1] != 'admin' %}
+                            <td class="record_navigation"><input type="submit" value="Revoke Admin" name='{{ record[0] }}'></td>
+                            <td class="record_navigation"><input type="submit" value="Delete User" name={{record[0]}}></td>
+                        {% endif %}
                     </form>
                 </tr>
             {% endfor %}

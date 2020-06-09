@@ -12,6 +12,7 @@ value_fills=[]
 new_buggy=[]
 updated_id=0
 
+#TODO revoke admin privileges
 
 #------------------------------------------------------------
 # the index page
@@ -218,6 +219,11 @@ def manage_users():
             con.commit()
             flash('User is now admin')
             return render_template("manage_users.html", users = result)
+        elif command_list[0][1] == 'Revoke Admin':
+            cur.execute("UPDATE users SET is_admin=0 WHERE id=?",(command_list[0][0],))
+            con.commit()
+            flash('User is no longer admin')
+            return render_template("index.html")
         elif command_list[0][1] == 'Delete User':
             try:
                 cur.execute("DELETE FROM users WHERE id=?", (command_list[0][0],))
