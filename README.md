@@ -184,3 +184,24 @@ If you've finished, you can deactivate the virtual environment:
     deactivate
 
 You're done!
+
+
+## Known Bugs
+
+- On manage accounts page, the buttons for make and revoke admin will show regardless of the admin state of a user
+- Passwords can currently not be self reset, has to be done by an admin user
+- Racelog is a static table as there were no results to obtain or use
+- Data in buggy management page shows as table values not descriptive values
+
+
+## Future Features
+
+Features which were planned but haven't yet been done:
+
+- Ability to search through completed buggies using a search box to filter results
+- Leaderboard of buggies which have won/entered the most races
+- Creating renders of the buggies
+- Integration of the Buggy API
+- Using E-mails to allow users to reset their own passwords
+- Tooltips describing features of the buggy as seen on the server rules page
+- Theming
