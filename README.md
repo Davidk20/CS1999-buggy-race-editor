@@ -4,35 +4,23 @@ CS1999: Buggy Race Editor
 > This is the "buggy editor" component of the Foundation Year Computer Science
 > project at RHUL.
 
+
 Overview
 --------
-
-This is the skeleton of an application for editing a racing buggy.
-
-It runs as a webserver so you can edit the configuration of a buggy in your
-browser. The editor can then generate the data, in JSON format, that you need
-in order to enter races on the [race server](http://rhul.buggyrace.net).
+This is a web app designed to create buggies. It runs as a webserver so you
+can edit the configuration of a buggy in your browser. The editor can then
+generate the data, in JSON format, that you need in order to enter races on
+the [race server](http://rhul.buggyrace.net).
 
 The application is written in Python3 using the
 [Flask](https://palletsprojects.com/p/flask/) microframework.
-
-> It's also written in a way which you can and should fix! You should be able
-> to get it up and running (with SQLite) without needing to change the code...
-> but from that point on you'll need to change pretty much everything to make
-> it better (including switching away from SQLite, perhaps?). 
 
 GitHub repo: [RHUL-CS-Projects/CS1999-buggy-race-editor](https://github.com/RHUL-CS-Projects/CS1999-buggy-race-editor])
 
 
 Developing in a browswer: repl.it
 ---------------------------------
-
-We recommend you clone/download this repo onto your own machine where you can
-begin developing on it: see the installation and set up instructions below (of
-course we also talk you through this at the start of the project).
-
-But if you have problems with that, or you don't have access to your own
-machine, you can work on it on [https://repl.it](https://repl.it).
+You can access this on [https://repl.it](https://repl.it).
 
 * fork this repo into your own GitHub account
 * log into repl.it
@@ -96,7 +84,7 @@ On Windows you can follow these instructions in the PowerShell. Alternatively
 if you use the [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
 (WSL) you can follow the instructions as Linux.
 
-For Mac or Unix-like systems, open a Terminl window.
+For Mac or Unix-like systems, open a Terminal window.
 
 To create the virtual environment, first `cd` to the directory which contains
 the application files (you might have use `git clone` to create it). Then do:
@@ -126,28 +114,28 @@ will be installed in this virtual environment:
 
 Finally, set up the database:
 
-    python3 init_db
-
-This creates a SQLite database in a file called `database.db`.
-
-There's no configuration file to edit. You're ready to go!
+The database is already configured when cloning the program. To begin,
+create an account from the link in the header and this will allow buggies
+to be created, modified and submitted using the editor. One admin account
+is configured on loading the program which has full admin capabilities
+including password resetting, account deletion and giving other users
+admin capabilities. This account is set to be undeletable to ensure there
+is always one admin account in the system. It is important to ensure that
+this database is not deleted as this contains values used in the methods
+in the app.
 
 
 #### Running the server
 
-If you're not already in the project's directory, `cd` into it.
+`cd` into the project directory and then activate the virtual environment.
 
-Then, if you haven't done so already, activate the virtual environment:
-
-
-Activate the virtual environment. On Windows, do:
+On Windows, do:
 
     .\venv\Scripts\activate
     
 On Linux or Mac:
 
     source venv/bin/activate
-
 
 Set the environment variable to `development`. On Windows do:
 
@@ -157,20 +145,26 @@ On Linux or Mac:
 
     export FLASK_ENV=development
 
-
 Now you can run the application:
 
-    python3 app.py
+    FLASK_APP=__init__.py python -m flask run
 
-The webserver is running on port 5000 (that's the default for Flask apps). If
-you make a request for a web page, it will reply with one!
+The webserver is running on port 5000 (the default for Flask apps).
 
 Go to [http://localhost:5000](http://localhost:5000) in your web browser.
 You haven't specified which file you want, so you'll get the `/` route, which
 (you can see this by looking in `app.py`) invokes the `index.html` template.
 
-You can see the webserver's activity in the terminal, and the result of its
-action in the browser.
+#### Development Mode
+
+Development mode allows changes to automatically apply to the server without
+needed to be restarted. This also means that any errors in the code are shown
+and a traceback is given instead of a blank error page. To enable this, ensure
+the following two commands are run after initialising the virtual environment
+and before starting the flask server.
+    
+    export FLASK_ENV=devlopment
+    export FLASK_DEBUG=1   
 
 
 #### Shutting down the server
@@ -183,9 +177,3 @@ If you've finished, you can deactivate the virtual environment:
     deactivate
 
 You're done!
-
-
----
-
-*RHUL CS1999... that's a course number, not a year* ;-)
-
