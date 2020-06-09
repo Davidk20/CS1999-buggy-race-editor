@@ -114,16 +114,25 @@ will be installed in this virtual environment:
 
 Finally, set up the database:
 
-The database is already configured when cloning the program. To begin,
-create an account from the link in the header and this will allow buggies
-to be created, modified and submitted using the editor. One admin account
-is configured on loading the program which has full admin capabilities
-including password resetting, account deletion and giving other users
-admin capabilities. This account is set to be undeletable to ensure there
-is always one admin account in the system. It is important to ensure that
-this database is not deleted as this contains values used in the methods
-in the app.
+    python3 init_db
 
+This script configures the database with tables for users, buggies and the
+costs associated with buggy creation. One admin account is configured with
+full admin capabilities including password resetting, account deletion and
+giving other users admin capabilities. This account is set to be undeletable
+to ensure there is always one admin account in the system. If there are ever
+issues with the database, for example no admin users or any other issue,
+deleting the *database.db* file and re-running the *init_db.py* script will
+fix any issues and restore the database to its initial state. This uses the 
+*buggy_costs.csv* file to configure so it is important to ensure this is not
+deleted.
+
+Once this is complete, run the two tests to ensure installation was successful
+
+    test_form_validation.py
+    test_cost_method.py
+    
+The documentation on testing can be found [here.](https://github.com/Davidk20/CS1999-buggy-race-editor/blob/master/TESTING.md)  
 
 #### Running the server
 
@@ -152,8 +161,6 @@ Now you can run the application:
 The webserver is running on port 5000 (the default for Flask apps).
 
 Go to [http://localhost:5000](http://localhost:5000) in your web browser.
-You haven't specified which file you want, so you'll get the `/` route, which
-(you can see this by looking in `app.py`) invokes the `index.html` template.
 
 #### Development Mode
 
