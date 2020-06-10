@@ -16,219 +16,336 @@
             </p>
     </div>
     <div class="task">
-      <h2>0-RUN Get app running and view it in a browser</h2>
-      <p>
-        <!-- sentence on _how_ you fixed it -->
+        <h2>0-RUN Get app running and view it in a browser</h2>
+            <p>
+                I followed the instructions in the
+                <a href="https://github.com/Davidk20/CS1999-buggy-race-editor/blob/master/README.md">README.md</a>
+                file to configure development mode and establish a server
       </p>
       <p>
         <!-- sentence(s) on anything interesting/incomplete you did -->
       </p>
     </div>
     <div class="task">
-      <h2>0-CHANGE Make a change to a template and see it appear</h2>
-      <p>
-        <!-- sentence on _how_ you fixed it -->
-      </p>
-      <p>
-        <!-- sentence(s) on anything interesting/incomplete you did -->
-      </p>
+        <h2>0-CHANGE Make a change to a template and see it appear</h2>
+            <p>
+                I added a label to the form and refreshed to see the change.
+            </p>
+            <p>
+                Changes to HTML code could be seen by refreshing normally however, changes to CSS took a 'hard refresh' or
+                pressing shift + refresh to be seen. This is because CSS is saved in the cache so the page loads faster, as
+                usually this changes less than the content of a page which does reload on every refresh.
+            </p>
     </div>
     <div class="task">
-      <h2>1-ADD Add more data to the form</h2>
-      <p>
-        <!-- sentence on _how_ you fixed it -->
-      </p>
-      <p>
-        <!-- sentence(s) on anything interesting/incomplete you did -->
-      </p>
+        <h2>1-ADD Add more data to the form</h2>
+            <p>
+                I took the list of buggy categories from the specification page and converted this into a form,
+                extending the existing form
+            </p>
+            <p>
+                This task involved updating the sql functions to also take more arguments to insert the full buggy
+            </p>
     </div>
     <div class="task">
-      <h2>1-VALID Add basic data validation</h2>
-      <p>
-        <!-- sentence on _how_ you fixed it -->
-      </p>
-      <p>
-        <!-- sentence(s) on anything interesting/incomplete you did -->
-      </p>
+        <h2>1-VALID Add basic data validation</h2>
+        <p>
+            This was done in two parts:
+            <ol>
+                <li>Using the properties of the <code>&lt;input&gt;</code> tag to limit the options of what could be entered.</li>
+                <li>Using the 'fill_form.py' file, the buggy configuration is passed in run through a series of tests to ensure it is valid</li>
+            </ol>
+        </p>
+        <p>
+            This task involved writing an external class to pass the buggy into. I chose to do this as it simplified the
+            app.py script and allowed for an easier integration with a testing function later on.
+        </p>
     </div>
     <div class="task">
-      <h2>1-STYLE Style your editor just how you like it</h2>
-      <p>
-        <!-- sentence on _how_ you fixed it -->
-      </p>
-      <p>
-        <!-- sentence(s) on anything interesting/incomplete you did -->
-      </p>
+        <h2>1-STYLE Style your editor just how you like it</h2>
+        <p>
+            I chose a colour theme and then developed on the existing style of the default editor to style the editor in
+            the way I wanted.
+        </p>
+        <p>
+            I did the majority of styling at the end of the development as it made more sense to style when I knew what
+            the final program would include therefore could layout and style what would look best, saving time as this
+            means I would not be constantly updating styles as I went along. One of these changes included changing the
+            orientation of the buggy records from a vertical list, to a horizontal table, which was more conservative
+            on space and more visually appealing
+        </p>
     </div>
     <div class="task">
-      <h2>2-EDIT Edit the record by loading its current values into the form</h2>
-      <p>
-        <!-- sentence on _how_ you fixed it -->
-      </p>
-      <p>
-        <!-- sentence(s) on anything interesting/incomplete you did -->
-      </p>
+        <h2>2-EDIT Edit the record by loading its current values into the form</h2>
+        <p>
+            I used the <code>select</code> query in SqLite to return the latest record in the database and then passed
+            this into the HTML form using <code>value</code> arguments within the form to preset the values when the
+            user loads the page.
+        </p>
+        <p>
+            In the final program, when the user loads the buggy form, a random buggy is generated instead of the
+            previous record. I chose to do this as it completes 3-AUTOFILL, the task to randomly generate a valid buggy.
+            I chose to overwrite this task with the random buggy as users can choose to modify existing buggies, as seen
+            in a later task, and so this meant that creating a random buggy instantly seemed more logical than loading
+            an existing buggy that users could load in another way. However, loading this buggy would just involve
+            making a change to the query to fetch a buggy, as it would instead be:
+            <br>
+            <code>"SELECT * FROM buggy WHERE user_id=? ORDER BY id DESC LIMIT 1",(user_id)</code>
+        </p>
     </div>
     <div class="task">
       <h2>2-FORM Make the form better</h2>
       <p>
-        <!-- sentence on _how_ you fixed it -->
+          To make the form better, I chose to layout the form in two columns, grouping logical properties together such
+          as fuel type and fuel units.
       </p>
       <p>
-        <!-- sentence(s) on anything interesting/incomplete you did -->
+         I did this by giving the display property the 'inline-block' style within the CSS so that forms would go on the
+         same line, as opposed to 'block' which would put each form on a different line. Then I used line breaks to
+         separate the lines of the form. I could have used something more efficient, such as a flex-grid or flex-wrap
+         which would have allowed me to do the same thing however I thought just using <code>&lt;br&gt;</code> tags would be
+         a simpler implementation. This was paired with the styling task as I created custom heights and widths for all
+         form elements to keep a consistency, and I wanted a two column layout as I wanted, where possible, to keep this
+         a single page web app.
       </p>
     </div>
     <div class="task">
       <h2>2-COST Calculate and save the game cost of the buggy</h2>
       <p>
-        <!-- sentence on _how_ you fixed it -->
+          I created a function 'cost_method.py' which takes in the buggy from the form, and iterates through a table in
+          the database 'buggy_costs' which contains the costs for each part per unit and per kg and also whether or not
+          a fuel type is consumable. The table is used to add up both costs and then this is concatenated with the
+          format: 'cost_unit / cost_kg' and put into the buggy table as a string under the column 'total_cost'.
       </p>
       <p>
-        <!-- sentence(s) on anything interesting/incomplete you did -->
+          The costs are currently hard coded into the database which would be problematic if the costs are changed on
+          the server. There are a few possible ways this could be improved. Firstly, it is possible the API could
+          contain these values, in which case, the API could be called with a function which would collect the values
+          and save them into the database meaning that this table is constantly updated and then would also mean the
+          values would only need to be loaded in once per change and so it wouldn't need to be called every time that
+          the user wants to calculate cost. Secondly, a web scraper could be used to read the tables on the page and
+          collect the data. This would involve more work than the API but as the ability of the API is unknown, both
+          would be considered. They also both, however, would require the user to have an internet connection to load
+          these values. One advantage of saving them to the table would be that if the user was offline, the buggy could
+          still use the latest values in the table and then once reconnected, they would have to re-download the costs
+          and then to update the cost of the buggy, they would just modify and submit an unchanged buggy as this will
+          recalculate the cost treating it as a new buggy.
       </p>
     </div>
     <div class="task">
       <h2>2-RULES Add validation according to the game rules</h2>
       <p>
-        <!-- sentence on _how_ you fixed it -->
+          I created the 'buggy_validation' class within 'form_validation.py' which runs a series of tests to ensure all
+          game rules are met
       </p>
       <p>
-        <!-- sentence(s) on anything interesting/incomplete you did -->
+          Four test functions are run by the class to ensure it meets all of the game rules. These split the criteria
+          for a valid buggy into four different categories:
+          <ul>
+                <li><code>numerical_test()</code> - Ensures the number of wheels are valid and also that there are more tires than wheels</li>
+                <li><code>comparison_test()</code>
+                    - Ensures the two fuel types are not the same, that any aux_power has a valid number of fuel units and also
+                    that the two flag colours do not match, unless the flag type is plain.
+                </li>
+                <li><code>hamster_test()</code> - Ensures the amount of hamster boosters is valid for the fuel types chosen</li>
+                <li><code>consumable_test()</code> - Ensures that any fuels marked as non-consumable have the correct amount of fuel.</li>
+          </ul>
       </p>
     </div>
     <div class="task">
       <h2>3-ENV Switch to using development or production environments</h2>
       <p>
-        <!-- sentence on _how_ you fixed it -->
+          I switched between development and production environments using <code>export FLASK_DEBUG=1</code> and
+          <code>export FLASK_ENV=development</code> in the terminal before running my flask server. This is also discussed
+          in the <a href="https://github.com/Davidk20/CS1999-buggy-race-editor/blob/master/README.md">README.md</a> file.
       </p>
       <p>
-        <!-- sentence(s) on anything interesting/incomplete you did -->
+          Being able to load in a development was useful as it allows for changes to be seen without reloading the server
+          while the production environment was designed to show how the server would function when deployed and so this with
+          debugging allowed errors to be quickly picked up, but then a production environment was useful to run the server
+          as it would be seen when deployed to make sure the experience is smooth for the user.
       </p>
     </div>
     <div class="task">
       <h2>3-AUTOFILL Add auto-fill to the edit forms</h2>
       <p>
-        <!-- sentence on _how_ you fixed it -->
+          Instead of a button, a random buggy is generated as soon as the user loads the make buggy page or when they
+          refresh the page
       </p>
       <p>
-        <!-- sentence(s) on anything interesting/incomplete you did -->
+          This is completed using the "fill_form.py' file and allows game valid buggies to be created as they are tested
+          against the same validation functions as user created buggies and using a recursion, are only passed to fill the
+          form if they meet the requirements. I didn't use a button to create the auto-fill however it would have been a
+          simple implementation. To do this I would have given the 'auto-fill' button a 'submit' function which sent a
+          POST request back to 'app.py' which would take the entire form using <code>var = request.form</code> which saves
+          the entire form in a 2D list with the input name and value saved inside each index. From this I could iterate
+          through this list and use my fill function to fill in the gaps finding any form, then reloading the form with
+          the gaps filled and a complete buggy provided.
       </p>
     </div>
     <div class="task">
       <h2>3-MULTI Allow different buggies to be created</h2>
       <p>
-        <!-- sentence on _how_ you fixed it -->
+          I changed the <code>update</code> in the sql query to be <code>insert</code> so that instead of updating a single
+          record, each time the user submits a buggy, a new record is created with an autoincrement ID.
       </p>
       <p>
-        <!-- sentence(s) on anything interesting/incomplete you did -->
+          Once the data was correctly formatted to be used in a query, which was already verified in previous tasks using
+          the update query, it was easy to update the existing query to work to insert the values into the database. As there
+          was then more than one buggy, I created a <code>for</code> loop within the buggy records to show all of the
+          created buggies.
       </p>
     </div>
     <div class="task">
       <h2>3-DEL Allow buggies to be deleted</h2>
       <p>
-        <!-- sentence on _how_ you fixed it -->
+          I modified the delete route which was in the base app.py file to pass in a buggy id which could be used as a
+          reference to delete that specific buggy using sqlite, then reloading the buggy list page to show the change.
       </p>
       <p>
-        <!-- sentence(s) on anything interesting/incomplete you did -->
+          The existing function would have deleted all buggies in the table and so I added a 'where' clause which would
+          only delete the buggy with the specific id that was passed in by the previous function.
       </p>
     </div>
     <div class="task">
       <h2>3-FLAG Display the pennant graphically</h2>
       <p>
-        <!-- sentence on _how_ you fixed it -->
+        To display the flag graphically, I used javascript and a canvas with set templates and an <code>if</code> statement
+        framework to decide which flag should be displayed. The colours could then be dynamically passed in through the
+        looping function to display all the buggies, so that each buggy could have its flag shown in the table.
       </p>
       <p>
-        <!-- sentence(s) on anything interesting/incomplete you did -->
+        Creating the first four patterns were very simple as it just involved creating a number of rectangles at
+        different angles and positions. However, for the spots pattern, this involved creating a smaller canvas and then
+        using <code>canvas.createPattern()</code> I was able to repeat this pattern across the whole canvas simplifying
+        the code as I only had to create one set of spots and it would be repeated. Originally, these canvases were much
+        larger and had their own page however when simplifying the code I decided to integrate them into the table and
+        shrink them.
       </p>
     </div>
     <div class="task">
       <h2>3-TESTS Write some tests</h2>
       <p>
-        <!-- sentence on _how_ you fixed it -->
+        I used the <code>unittest</code> module to create tests for the two python classes which handle data manipulation
+        to ensure they are running correctly. This involved using the <code>assertEqual()</code> function to check that
+        the cost and validation functions are returning the correct output.
       </p>
       <p>
-        <!-- sentence(s) on anything interesting/incomplete you did -->
+          The test functions involve creating a set of buggies which would test valid, invalid and values on the boundaries.
+          The <code>assertEqual()</code> function takes in two arguments: the function to be tested and the value to be
+          expected. If these match then the test is a success. If not, the test will return an error and list where the
+          error was found. Testing these functions is appropriate because they interact with data which can have dozens
+          of combinations and so it is important to know that the functions will catch errors in all cases necessary.
+          Ideally, I would have set the tests to run in the <code>__init__.py</code> file so that it was fully automated
+          could pickup errors and fix them, if possible, without the user needing to interact, simplifying the process.
+          <br>
+          Full details on testing can be found in
+          <a href="https://github.com/Davidk20/CS1999-buggy-race-editor/blob/master/TESTING.md">TESTING.md</a>.
       </p>
     </div>
     <div class="task">
       <h2>4-USERS Add users (and sessions) so not just anyone can edit a buggy</h2>
       <p>
-        <!-- sentence on _how_ you fixed it -->
+          The task of user management involved creating two new python files, <code>__init__.py</code> and
+          <code>auth.py</code> to allow a new method of page management, Flask Blueprints meaning that login and
+          authorisation could be more secure. Using the <code>@login_required</code> tag in the method allows pages to be
+          locked off from unauthorised users and also means that I can assign a current_user class so this can be used to
+          allow information that this user is able to see.
       </p>
       <p>
-        <!-- sentence(s) on anything interesting/incomplete you did -->
+          Creating users and sessions involved a large rewrite of the functionality of the site as it meant locking off
+          different areas to different users and modifying all existing database queries to only work within the parameters
+          of that users area. An issue I found was that because I was not using SQLAlchemy, one of the modules which is
+          commonly partnered with UserMixin to allow easy implementation of users and sessions, I had to create my own
+          user class and functions which would work with SQLite and the methods I was using. This is the <code>user_model.py</code>
+          file.
       </p>
     </div>
     <div class="task">
       <h2>4-OWNER A buggy belongs to a user</h2>
       <p>
-        <!-- sentence on _how_ you fixed it -->
+          I created a new field in the buggy table called user_id. This is a foreign key referencing the id column in
+          the users table meaning that I could link and assign buggies to users so that they 'owned' the buggy and they could
+          see or modify.
       </p>
       <p>
-        <!-- sentence(s) on anything interesting/incomplete you did -->
+          This took the current_user class I had modified and passed the id of the logged in user into the buggy so that
+          when a user accesses the buggy database, the select query will return all buggies with their id so that they
+          can only see buggies belonging to them.
       </p>
     </div>
     <div class="task">
       <h2>4-PASS Add password protection to the users</h2>
       <p>
-        <!-- sentence on _how_ you fixed it -->
+          I used the <code>werkzeug.security</code> module and password hashing functions to give password protection to
+          users accounts.
       </p>
       <p>
-        <!-- sentence(s) on anything interesting/incomplete you did -->
+          Once the concept of users and sessions was implemented, it was very simple to add password protection as the
+          hashed password would be stored in the database and checked against the users entry to ensure they match,
+          allowing them to login.
       </p>
     </div>
-    <div class="task">
-      <h2>5-VIZ Visual representation of the buggy</h2>
-      <p>
-        <!-- sentence on _how_ you fixed it -->
-      </p>
-      <p>
-        <!-- sentence(s) on anything interesting/incomplete you did -->
-      </p>
-    </div>
+
     <div class="task">
       <h2>5-RESET Password reset</h2>
       <p>
-        <!-- sentence on _how_ you fixed it -->
+          Password reset is available to admin users who can access the 'Manage Accounts' page in the menu and will be
+          able to reset any users password to a set default.
       </p>
       <p>
-        <!-- sentence(s) on anything interesting/incomplete you did -->
+          I did not get to implement E-mail password reset and so currently users would have to get an admin to reset
+          their password. However, new accounts are requested to submit an email on registration and so to add this,
+          I would need to firstly import a module to check the email is a valid account, such as <code>validate_email</code>
+          and then add a 'forgot password' button which users could press. This would send an email to the user.
+          To send the email, I would use the <code>Flask-Mail</code> module to configure an SMTP (Simple Mail Transfer
+          Protocol) server and send the email to the email listed in the users account. This email would contain a link
+          to a page in the auth blueprint, so that it is more secure than sending users into main and authorising them.
+          From here they would be able to reset their password and then login. It would be important to leave the SMPT
+          files out of the Git repo as these would include personal details for an email account I would own and therefore
+          I do not want this left in the repo as anyone could clone the repo and have access to my personal email account.
       </p>
     </div>
     <div class="task">
       <h2>5-RACELOG Store a history of race results for the buggies in your app</h2>
       <p>
-        <!-- sentence on _how_ you fixed it -->
+          There were no races in the race log to collect from so I took a dummy table showing what the results page would
+          look like.
       </p>
       <p>
-        <!-- sentence(s) on anything interesting/incomplete you did -->
+          I created a simple HTML table and entered dummy values to simulate race results. If races were conducted and I
+          had results to enter I would use a similar system to the fetching of costs from the buggy server. This would mean
+          using either the API or a web scraper to fetch the results in whatever format they were listed and display them
+          in the table.
       </p>
     </div>
     <div class="task">
       <h2>5-ADMIN Add admin capabilities to superusers</h2>
       <p>
-        <!-- sentence on _how_ you fixed it -->
+          Admin capability was added by using a simple boolean test in the users table in the column <code>is_admin</code>.
+          This field stored a value of 1 or 0 depending on whether or not these users were admin.
       </p>
       <p>
-        <!-- sentence(s) on anything interesting/incomplete you did -->
-      </p>
-    </div>
-    <div class="task">
-      <h2>5-API Use the server API for submitting the buggy data</h2>
-      <p>
-        <!-- sentence on _how_ you fixed it -->
-      </p>
-      <p>
-        <!-- sentence(s) on anything interesting/incomplete you did -->
+          Being an admin allowed users to manage the accounts of other users including making or revoking their admin
+          privileges or also deleting users. It was important that one admin account was always created as otherwise no
+          user was able to have admin privileges so I locked the admin with id = 1 so that their admin could not be
+          revoked and they could not be deleted. If this still were to go wrong then the <code>init_db.py</code> would
+          allow a new users table to be made with a new admin user.
       </p>
     </div>
     <div class="task">
       <h2>6-FREE Add custom features to the editor</h2>
       <p>
-        <!-- sentence on _how_ you fixed it -->
+          Throughout development there were many additional features that I included as I thought they would be useful and seemed
+          natural to include at the time.
       </p>
       <p>
-        <!-- sentence(s) on anything interesting/incomplete you did -->
+          These include:
+          <ul>
+              <li>Ability for users to edit details of their own account such as changing name or email</li>
+              <li>The buggy database screen includes the ability for users to modify existing buggies</li>
+              <li>The buggy database also includes a button to get JSON for any buggy in the users record</li>
+          </ul>
       </p>
     </div>
 </section>
