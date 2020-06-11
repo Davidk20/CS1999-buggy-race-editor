@@ -1,8 +1,58 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section class="cs1999-tasks">
+<script>
+    var i = 0;
+    var images = ["\\static\\screenshots\\screenshot_1.png",
+                "\\static\\screenshots\\screenshot_2.png",
+                "\\static\\screenshots\\screenshot_3.png",
+                "\\static\\screenshots\\screenshot_4.png",
+                "\\static\\screenshots\\screenshot_5.png",
+                "\\static\\screenshots\\screenshot_6.png"]
+    function slideshow(){
+        var gallery = document.getElementById('gallery');
+        gallery.src=images[i];
+        i ++;
+        if (i == 6){
+            i = 0
+        }
+    }
+    window.onload = function() {setInterval("slideshow()",2000)};
+</script>
 
+<div class="poster">
+    <h1>The Buggy Editor</h1>
+    <div class="screenshots">
+        <h2>Screenshots</h2>
+        <img src="static\screenshots\screenshot_1.png" width="672px" height="366px" id="gallery">
+    </div>
+    <div class="feature_list">
+        <h2>Features</h2>
+        <ul>
+            <li>Full User account control to make sure your buggies are kept safe and secure</li>
+            <li>Get the edge on your opponents with full buggy customisation</li>
+            <li>See what tactics work best with a comprehensive race history</li>
+            <li>Wide range of flag graphics available</li>
+            <img src="static\screenshots\flags.png" width="632px">
+        </ul>
+        <h2>Coming Soon</h2>
+        <ul>
+            <li>Full database search to find whatever you're looking for</li>
+            <li>Leaderboards to find where you rank within the best racers and buggies</li>
+            <li>Visual buggy creation to experience beyond lines of text</li>
+            <li>Integration of the Buggy API to streamline buggy entry</li>
+            <li>Tooltips describing features of the buggy as seen on the server rules page</li>
+            <li>Theming</li>
+        </ul>
+    </div>
+    <a href="https://github.com/Davidk20/CS1999-buggy-race-editor">
+        <div class="git_button">
+            <img src="static/hamster.png" height="150px">
+            <h4>Get the editor</h4>
+        </div>
+    </a>
+</div>
+<section class="cs1999-tasks">
     <div class="task">
         <h2>0-GET</h2>
             <p>
@@ -10,7 +60,7 @@
             </p>
             <p>
                 Once the repo was on my own machine I was able to commit changes to version control
-                as I went along, and I pushed back up to my GitHub repo at the end of each day.
+                as I went along, and I pushed back up to my GitHub repo at the end of each task.
                 I followed GitHub's instructions and set up a SSH key so I didn't need to enter
                 username and password every time I pushed.
             </p>
@@ -32,19 +82,20 @@
                 I added a label to the form and refreshed to see the change.
             </p>
             <p>
-                Changes to HTML code could be seen by refreshing normally however, changes to CSS took a 'hard refresh' or
-                pressing shift + refresh to be seen. This is because CSS is saved in the cache so the page loads faster, as
-                usually this changes less than the content of a page which does reload on every refresh.
+                Changes to HTML code can be seen with a standard refresh. However, changes to CSS take a 'hard refresh' or
+                pressing shift + refresh to be seen. CSS is saved in the cache as it is less likely to change as opposed
+                to the content in HTML so it speeds up loading. Therefore the hard refresh is needed to reload content
+                like this.
             </p>
     </div>
     <div class="task">
         <h2>1-ADD Add more data to the form</h2>
             <p>
                 I took the list of buggy categories from the specification page and converted this into a form,
-                extending the existing form
+                extending the existing form.
             </p>
             <p>
-                This task involved updating the sql functions to also take more arguments to insert the full buggy
+                This task involved updating the sql update query to also take more arguments to insert the full buggy
             </p>
     </div>
     <div class="task">
@@ -58,7 +109,10 @@
         </p>
         <p>
             This task involved writing an external class to pass the buggy into. I chose to do this as it simplified the
-            app.py script and allowed for an easier integration with a testing function later on.
+            app.py script and allowed for an easier integration with a testing function later on. More on the data validation
+            in the form can be found in
+            <a href="https://github.com/Davidk20/CS1999-buggy-race-editor/blob/master/TESTING.md">TESTING.md</a>.
+
         </p>
     </div>
     <div class="task">
@@ -68,11 +122,11 @@
             the way I wanted.
         </p>
         <p>
+            It was more logical to style the majority of the program at the end of its development
             I did the majority of styling at the end of the development as it made more sense to style when I knew what
             the final program would include therefore could layout and style what would look best, saving time as this
             means I would not be constantly updating styles as I went along. One of these changes included changing the
-            orientation of the buggy records from a vertical list, to a horizontal table, which was more conservative
-            on space and more visually appealing
+            orientation of the buggy records from a vertical list, to a horizontal table, as it suited the design better.
         </p>
     </div>
     <div class="task">
@@ -106,7 +160,8 @@
          which would have allowed me to do the same thing however I thought just using <code>&lt;br&gt;</code> tags would be
          a simpler implementation. This was paired with the styling task as I created custom heights and widths for all
          form elements to keep a consistency, and I wanted a two column layout as I wanted, where possible, to keep this
-         a single page web app.
+         a single page web app. Setting up the form in this way makes it easier as there are a lot of different entries
+         and so this makes it appear to be more concise than a long list of entries.
       </p>
     </div>
     <div class="task">
@@ -124,7 +179,7 @@
           and save them into the database meaning that this table is constantly updated and then would also mean the
           values would only need to be loaded in once per change and so it wouldn't need to be called every time that
           the user wants to calculate cost. Secondly, a web scraper could be used to read the tables on the page and
-          collect the data. This would involve more work than the API but as the ability of the API is unknown, both
+          collect the data. This would involve more work than the API but as the functionality of the API is unknown, both
           would be considered. They also both, however, would require the user to have an internet connection to load
           these values. One advantage of saving them to the table would be that if the user was offline, the buggy could
           still use the latest values in the table and then once reconnected, they would have to re-download the costs

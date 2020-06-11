@@ -344,11 +344,28 @@ img{
         cursor: pointer;
     }
 }
+.race_log{
+    margin-left: auto;
+    margin-right: auto;
+    th{
+        padding: 1.5em;
+        background-color:#fff100;
+        color:black;
+    }
+}
+.graphic_window{
+    background-color: white;
+    border: 1px white solid;
+    max-height: 98px;
+    max-width: 98px;
+}
 .cs1999-tasks {
     border-top: 1px solid black;
-    margin-top: 4em;
+    margin-top: 5em;
     background-color:white;
     color: black;
+    margin-bottom:0.5em;
+    display: block;
 }
 .cs1999-tasks .task {
     margin: 1em;
@@ -358,19 +375,67 @@ img{
 .cs1999-tasks .task h2 {
     border-bottom: 3px solid gray;
 }
-.graphic_window{
+.poster{
     background-color: white;
-    border: 1px white solid;
-    max-height: 98px;
-    max-width: 98px;
-}
-.race_log{
-    margin-left: auto;
-    margin-right: auto;
-    th{
-        padding: 1.5em;
-        background-color:#fff100;
-        color:black;
-
+    color:black;
+    width:100%;
+    height:100vh;
+    overflow-x: hidden;
+    margin-bottom: 3em;
+    h1{
+        font-size: 3em;
+        background-color: black;
+        color:#fff100;
+        width:500px;
+        margin-left: auto;
+        margin-right: auto;
+        padding:0.12em;
     }
+    h2{
+        text-align: left;
+    }
+    .screenshots{
+        display:inline-block;
+        margin-left: 1em;
+    }
+    .feature_list{
+        display:inline-block;
+        float: right;
+        width:50%;
+        text-align: left;
+        img{
+            padding-top: 1em;
+            margin-left: 0;
+        }
+    }
+    .git_button{
+        display: block;
+        width:330px;
+        height:150px;
+        margin-right: auto;
+        margin-left: auto;
+        text-align: center;
+        border:#d72323 7px solid;
+        border-radius: 20px;
+        position: absolute;
+        bottom:0;
+        left:40%;
+        background-color: black;
+        h4{
+            float:right;
+            margin-top:3em;
+            color: #fff100;
+            margin-right:1em;
+        }
+        img{
+            float:left;
+        }
+    }
+    .git_button:hover{
+        background-color: #fff100;
+        h4{
+            color: black;
+        }
+    }
+
 }
