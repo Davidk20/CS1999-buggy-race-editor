@@ -8,9 +8,6 @@ from .cost_method import cost_method
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'thisisthesecretkey'
-    app.config['ENV'] = 'development'
-    app.config['DEBUG'] = True
-    app.config['TESTING'] = True
 
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
